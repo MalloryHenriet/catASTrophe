@@ -1,6 +1,14 @@
 # catASTrophe
 Automated Bug Detection in the Database Engines SQLite3.26.0
 
+# Requirements
+To proceed with the scripts, please make sure you installed all the following requirements by typing this command
+```
+pip install -r requirements.txt
+```
+
+# Project
+
 **Objectives**:
 
 1. Evaluates the reliability of SQLite3.26.0 by detecting crashes and logic bugs. 
