@@ -23,3 +23,16 @@ pip install -r requirements.txt
 
 # User Guide
 Description of the command lines
+
+To run the script type the following command
+```
+python3 main.py
+```
+
+### Arguments
+One can add argument like ``-v`` or ``--version`` with one of the following values
+```
+/usr/bin/sqlite3-3.26.0
+/usr/bin/sqlite3-3.39.4
+```
+It will only launch the tester with the selected SQL engine version, otherwise it will test both by default.
