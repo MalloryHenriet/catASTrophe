@@ -1,3 +1,4 @@
 sqlparse
 numpy
 docker
+sqlglot
