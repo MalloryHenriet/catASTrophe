@@ -1,11 +1,10 @@
 # Main file
-import random
 import argparse
 
-#from querie_gen import QueryGenerator
-# from record_bug import BugRecorder
-# from querie_run import QueryRunner
-# from database_gen import DatabaseGenerator
+from querie_gen import QueryGenerator
+from record_bug import BugRecorder
+from querie_run import QueryRunner
+from database_gen import DatabaseGenerator
 import subprocess
 
 from config import BUG_TYPES, VERSIONS
@@ -26,21 +25,22 @@ def start_docker_compose():
 
 def main(version):
     start_docker_compose()
-    #query_generator = QueryGenerator()
-    #recorder = BugRecorder()
-    #runner = QueryRunner()
+    query_generator = QueryGenerator()
+    recorder = BugRecorder()
+    runner = QueryRunner()
 
-    #database_generator = DatabaseGenerator()
-    #database = database_generator.generate_database()
+    database_generator = DatabaseGenerator()
+    database = database_generator.generate_database()
 
-    #pivot = database_generator.choose_pivot()
-
-    # for _ in range(100000):
-    #     query = query_generator.generate_query_for_pivot(pivot)
-    #     result = runner.run(query, version, database)
-    #     if result in BUG_TYPES:
-    #         recorder.report_bug(query, version)
-
+    # PQS Loop
+    for _ in range(25):
+        pivot, table_name = database_generator.choose_pivot()
+        print(pivot)
+        query = query_generator.generate_query_for_pivot(pivot, table_name)
+        print(query)
+        result = runner.run(query, version, database)
+        if result in BUG_TYPES:
+            recorder.report_bug(query, version)
 
 
 if __name__ == "__main__":

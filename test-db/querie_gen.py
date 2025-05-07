@@ -13,18 +13,28 @@
 
 # We are going to use the 2 datasets kpop_idols and kpop_ranking for query generation
 
-
-
-
-# =================import random
-# import sqlglot
+import random
+from sqlglot import exp
 
 class QueryGenerator:
     def __init__(self):
         pass
 
-    def generate_query_for_pivot(pivot):
-        return random.random()
+    def generate_query_for_pivot(self, pivot, table_name):
+        conditions = []
+        for col, value in pivot.items():
+            if value is None:
+                conditions.append(exp.Is(this=exp.Column(this=col), expression=exp.Null()))
+            else:
+                literal = exp.Literal.string(str(value))
+                conditions.append(exp.EQ(this=exp.Column(this=col), expression=literal))
+
+        expressions = conditions[0]
+        for cond in conditions[1:]:
+            expressions = exp.And(this=expressions, expression=cond)
+
+        query = exp.select("*").from_(table_name).where(expressions)
+        return query
 
     def generate_query(self):
         # TODO: implement
