@@ -2,3 +2,4 @@ sqlparse
 numpy
 docker
 sqlglot
+pandas
