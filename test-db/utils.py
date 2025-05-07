@@ -22,8 +22,6 @@ def write_file(path, filename, content):
 def create_table(table_name, columns):
     column_defs = ', '.join([f'"{col_name}" {col_type}' for col_name, col_type in columns])
     statement = f"CREATE TABLE {table_name} ({column_defs});"
-
-    print(statement)
     return statement
 
 def generate_insert(table_name, df):

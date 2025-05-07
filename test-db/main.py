@@ -1,5 +1,4 @@
 # Main file
-import random
 import argparse
 
 from querie_gen import QueryGenerator
@@ -17,10 +16,12 @@ def main(version):
     database_generator = DatabaseGenerator()
     database = database_generator.generate_database()
 
-    pivot = database_generator.choose_pivot()
-
-    for _ in range(100000):
+    # PQS Loop
+    for _ in range(25):
+        pivot = database_generator.choose_pivot()
+        print(pivot)
         query = query_generator.generate_query_for_pivot(pivot)
+        print(query)
         result = runner.run(query, version, database)
         if result in BUG_TYPES:
             recorder.report_bug(query, version)
