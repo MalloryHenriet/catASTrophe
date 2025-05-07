@@ -18,9 +18,9 @@ def main(version):
 
     # PQS Loop
     for _ in range(25):
-        pivot = database_generator.choose_pivot()
+        pivot, table_name = database_generator.choose_pivot()
         print(pivot)
-        query = query_generator.generate_query_for_pivot(pivot)
+        query = query_generator.generate_query_for_pivot(pivot, table_name)
         print(query)
         result = runner.run(query, version, database)
         if result in BUG_TYPES:

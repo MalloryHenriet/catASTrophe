@@ -38,7 +38,8 @@ class DatabaseGenerator:
         if self.idols_df is None or self.songs_df is None:
             raise RuntimeError("You must generate a database by calling generate_database() before choosing a pivot.")
         
-        df = random.choice([self.idols_df, self.songs_df])
+        table_choice = random.choice(["idols_table", "songs_table"])
+        df = self.idols_df if table_choice == "idols_table" else self.songs_df
         pivot = df.sample(1).to_dict(orient="records")[0]
 
-        return pivot
+        return pivot, table_choice
