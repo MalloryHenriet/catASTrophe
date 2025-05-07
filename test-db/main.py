@@ -14,7 +14,7 @@ def start_docker_compose():
     try:
         # Run docker-compose up in the background
         print("Starting Docker Compose...")
-        result = subprocess.run(['docker-compose', 'up', '-d'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        result = subprocess.run(['docker', 'compose', 'up', '-d'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         print("Docker Compose started successfully.")
         print(result.stdout.decode())  # Optional: Print the output from the command
     except subprocess.CalledProcessError as e:
