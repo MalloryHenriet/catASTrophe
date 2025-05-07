@@ -2,28 +2,45 @@
 import random
 import argparse
 
-from querie_gen import QueryGenerator
-from record_bug import BugRecorder
-from querie_run import QueryRunner
-from database_gen import DatabaseGenerator
+#from querie_gen import QueryGenerator
+# from record_bug import BugRecorder
+# from querie_run import QueryRunner
+# from database_gen import DatabaseGenerator
+import subprocess
 
 from config import BUG_TYPES, VERSIONS
 
+
+def start_docker_compose():
+    try:
+        # Run docker-compose up in the background
+        print("Starting Docker Compose...")
+        result = subprocess.run(['docker-compose', 'up', '-d'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("Docker Compose started successfully.")
+        print(result.stdout.decode())  # Optional: Print the output from the command
+    except subprocess.CalledProcessError as e:
+        print("Error starting Docker Compose:")
+        print(e.stderr.decode())  # Optional: Print the error output
+        exit(1)
+
+
 def main(version):
-    query_generator = QueryGenerator()
-    recorder = BugRecorder()
-    runner = QueryRunner()
+    start_docker_compose()
+    #query_generator = QueryGenerator()
+    #recorder = BugRecorder()
+    #runner = QueryRunner()
 
-    database_generator = DatabaseGenerator()
-    database = database_generator.generate_database()
+    #database_generator = DatabaseGenerator()
+    #database = database_generator.generate_database()
 
-    pivot = database_generator.choose_pivot()
+    #pivot = database_generator.choose_pivot()
 
-    for _ in range(100000):
-        query = query_generator.generate_query_for_pivot(pivot)
-        result = runner.run(query, version, database)
-        if result in BUG_TYPES:
-            recorder.report_bug(query, version)
+    # for _ in range(100000):
+    #     query = query_generator.generate_query_for_pivot(pivot)
+    #     result = runner.run(query, version, database)
+    #     if result in BUG_TYPES:
+    #         recorder.report_bug(query, version)
+
 
 
 if __name__ == "__main__":

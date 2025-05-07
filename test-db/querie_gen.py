@@ -13,8 +13,11 @@
 
 # We are going to use the 2 datasets kpop_idols and kpop_ranking for query generation
 
-import random
-import sqlglot
+
+
+
+# =================import random
+# import sqlglot
 
 class QueryGenerator:
     def __init__(self):
