@@ -33,11 +33,9 @@ def main(version):
     database = database_generator.generate_database()
 
     query_crash = "SELECT * FROM non_existing_table WHERE id = (SELECT * FROM another_table);"
-    result = runner.run(query_crash, version, database)
-    if result.startswith("Error"):
-        recorder.report_bug(query_crash, version)
-
-    print(result)
+    bug_type, result = runner.run(query_crash, version, database)
+    if result:
+            recorder.report_bug(query_crash, version)
 
     # PQS Loop
     for _ in range(25):
@@ -45,8 +43,8 @@ def main(version):
         print(pivot)
         query = query_generator.generate_query_for_pivot(pivot, table_name)
         print(query)
-        result = runner.run(query, version, database)
-        if result in BUG_TYPES:
+        bug_type, result = runner.run(query, version, database)
+        if bug_type:
             recorder.report_bug(query, version)
 
 
