@@ -27,4 +27,4 @@ class BugRecorder:
         write_file(path, "original_test.sql", query)
 
         # 5.
-        write_file(path, "version.txt", version)
+        write_file(path, "version.txt", "\n".join(version))

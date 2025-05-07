@@ -32,6 +32,13 @@ def main(version):
     database_generator = DatabaseGenerator()
     database = database_generator.generate_database()
 
+    query_crash = "SELECT * FROM non_existing_table WHERE id = (SELECT * FROM another_table);"
+    result = runner.run(query_crash, version, database)
+    if result.startswith("Error"):
+        recorder.report_bug(query_crash, version)
+
+    print(result)
+
     # PQS Loop
     for _ in range(25):
         pivot, table_name = database_generator.choose_pivot()
