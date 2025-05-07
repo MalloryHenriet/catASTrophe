@@ -5,10 +5,26 @@ from querie_gen import QueryGenerator
 from record_bug import BugRecorder
 from querie_run import QueryRunner
 from database_gen import DatabaseGenerator
+import subprocess
 
 from config import BUG_TYPES, VERSIONS
 
+
+def start_docker_compose():
+    try:
+        # Run docker-compose up in the background
+        print("Starting Docker Compose...")
+        result = subprocess.run(['docker-compose', 'up', '-d'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("Docker Compose started successfully.")
+        print(result.stdout.decode())  # Optional: Print the output from the command
+    except subprocess.CalledProcessError as e:
+        print("Error starting Docker Compose:")
+        print(e.stderr.decode())  # Optional: Print the error output
+        exit(1)
+
+
 def main(version):
+    start_docker_compose()
     query_generator = QueryGenerator()
     recorder = BugRecorder()
     runner = QueryRunner()
