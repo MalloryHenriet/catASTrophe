@@ -2,6 +2,8 @@ import subprocess
 import time
 import os
 
+from config import BUG_TYPES
+
 class QueryRunner:
     def __init__(self, sqlite_container_name='sqlite3-container'):
         # The SQLite container name (you can modify if needed)
@@ -37,17 +39,17 @@ class QueryRunner:
 
             # Output the result of the query
             print("Query Result:", result.stdout)
-            return result.stdout
 
-        except subprocess.CalledProcessError as e:
-            print(f"Error occurred: {e}")
-            print("Error output:", e.stderr)
-            return f"Error executing query: {e}"
-        
+            if result.returncode != 0:
+                return BUG_TYPES[0], result.stderr
+            
+            return BUG_TYPES[1] if self.pivot_missing(result.stdout) else None, result.stdout
+
         except Exception as e:
-            print(f"Unexpected error: {e}")
-            return f"An unexpected error occurred: {e}"
+            return BUG_TYPES[0], str(e)
 
+    def pivot_missing(self, result_str):
+        return False
 
     def check_container_status(self):
         """
