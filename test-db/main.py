@@ -45,7 +45,7 @@ def main(version):
         print(query)
         bug_type, result = runner.run(query, version, database)
         if bug_type:
-            recorder.report_bug(query, version)
+            recorder.report_bug(query, version, bug_type)
 
 
 if __name__ == "__main__":
