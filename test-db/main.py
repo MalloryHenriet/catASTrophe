@@ -36,7 +36,7 @@ def main(version):
     database = database_generator.generate_database()
 
     # PQS Loop
-    for _ in range(25):
+    for _ in range(10):
         pivot, table_name = database_generator.choose_pivot()
         print(pivot)
 
@@ -52,7 +52,7 @@ def main(version):
             recorder.report_bug(query.sql(), version, bug_type)
 
 
-    print(get_freq_clauses(sql_clauses_count))
+    print(f"Frquency per clauses: {get_freq_clauses(sql_clauses_count)}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process runs from a specified folder.")

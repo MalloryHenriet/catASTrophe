@@ -84,5 +84,5 @@ def update_count_clauses(query, count):
     return count
 
 def get_freq_clauses(count):
-    freqs = {k: np.array(v).mean() for k, v in count.items()}
+    freqs = {k: float(np.mean(v)) for k, v in count.items()}
     return freqs
