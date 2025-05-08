@@ -2,10 +2,10 @@
 import uuid
 import os
 import random
-import re
 import pandas as pd
 import numpy as np
 from sqlglot import exp
+from sqlglot.expressions import Expression
 
 from config import SQL_CLAUSES
 
@@ -86,3 +86,8 @@ def update_count_clauses(query, count):
 def get_freq_clauses(count):
     freqs = {k: float(np.mean(v)) for k, v in count.items()}
     return freqs
+
+def get_expression_depth(query):
+    if not isinstance(query, Expression) or not query.args:
+        return 1
+    return 1 + max((get_expression_depth(child) for child in query.args.values() if isinstance(child, Expression)), default=0)
