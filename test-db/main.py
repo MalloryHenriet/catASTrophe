@@ -1,5 +1,8 @@
 # Main file
 import argparse
+import subprocess
+import os
+import shutil
 
 from querie_gen import QueryGenerator
 from record_bug import BugRecorder
@@ -8,6 +11,11 @@ from database_gen import DatabaseGenerator
 import subprocess
 
 from config import BUG_TYPES, VERSIONS
+
+#COVERAGE_DIR = "/sqlite/sqlite-autoconf-3450100"  # Path to SQLite source in the container (or wherever coverage files are generated)
+CONTAINER_NAME = "sqlite3-container"  # Name of the container in your docker-compose.yml
+COVERAGE_OUT_DIR = "./coverage_out"  # Local directory where coverage data will be copied
+
 
 
 def start_docker_compose():
@@ -21,6 +29,42 @@ def start_docker_compose():
         print("Error starting Docker Compose:")
         print(e.stderr.decode())  # Optional: Print the error output
         exit(1)
+
+def extract_coverage():
+    """
+    Extract .gcda files from the Docker container and run gcov.
+    """
+    print("[*] Extracting coverage data from Docker container...")
+
+    # Path where the gcda files are located inside the container
+    coverage_path_in_container = "/home/test/sqlite/"  # Update with the correct path
+    local_coverage_dir = COVERAGE_OUT_DIR  # Local directory where coverage data will be copied
+
+    # Ensure the local coverage directory exists
+    if not os.path.exists(local_coverage_dir):
+        os.makedirs(local_coverage_dir)
+
+    try:
+        # Copy the coverage data files (.gcda) from the container to the host machine
+        subprocess.run(
+            ["docker", "cp", f"{CONTAINER_NAME}:{coverage_path_in_container}", local_coverage_dir], 
+            check=True
+        )
+        print("[*] Coverage data copied successfully.")
+
+        # Run gcov on the extracted files
+        print("[*] Running gcov on the extracted files...")
+
+        for root, dirs, files in os.walk(local_coverage_dir):
+            for file in files:
+                if file.endswith(".c"):  # Only process C source files
+                    full_path = os.path.join(root, file)
+                    subprocess.run(["gcov", "-b", "-c", full_path], cwd=root)
+
+        print("[✓] Coverage data generated. Check *.gcov files in the coverage_out folder.")
+
+    except subprocess.CalledProcessError as e:
+        print(f"[ERROR] Error while extracting coverage: {e}")
 
 
 def main(version):
@@ -41,6 +85,8 @@ def main(version):
         result = runner.run(query, version, database)
         if result in BUG_TYPES:
             recorder.report_bug(query, version)
+    
+    extract_coverage()
 
 
 if __name__ == "__main__":

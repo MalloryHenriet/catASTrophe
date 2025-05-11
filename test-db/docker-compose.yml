@@ -18,6 +18,11 @@ services:
   sqlite3:
     image: theosotr/sqlite3-test  # Use the correct Docker image
     container_name: sqlite3-container
+    volumes:
+      - ./coverage_out:/coverage_out  # Store coverage data outside the container
+    stdin_open: true
+    tty: true
+
     # platform: linux/arm64  # Force Docker to use the ARM architecture
 #     volumes:
 #       - ./sqlite_data:/sqlite  # Mount a local directory to store SQLite data

@@ -1,17 +1,17 @@
 # Use a base image (e.g., Python image)
-FROM python:3.9-slim
+# FROM python:3.9-slim
 
-# Set the working directory inside the container
-WORKDIR /app
+# # Set the working directory inside the container
+# WORKDIR /app
 
-# Copy your Python script that interacts with SQLite into the container
-COPY . .
+# # Copy your Python script that interacts with SQLite into the container
+# COPY . .
 
-# Install any dependencies you need (e.g., SQLite3 for Python)
-RUN pip install --no-cache-dir -r requirements.txt
+# # Install any dependencies you need (e.g., SQLite3 for Python)
+# RUN pip install --no-cache-dir -r requirements.txt
 
-# Command to run when the container starts (replace with your own entrypoint)
-CMD ["python", "interact_with_sqlite.py"]
+# # Command to run when the container starts (replace with your own entrypoint)
+# CMD ["python", "interact_with_sqlite.py"]
 
 
 

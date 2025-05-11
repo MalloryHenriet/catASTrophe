@@ -1,0 +1,1 @@
+SELECT * FROM non_existing_table WHERE id = (SELECT * FROM another_table);
