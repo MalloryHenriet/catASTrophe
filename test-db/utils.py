@@ -1,8 +1,13 @@
 # Utilities functions
 import uuid
 import os
-import pandas as pd
 import random
+import pandas as pd
+import numpy as np
+from sqlglot import exp
+from sqlglot.expressions import Expression
+
+from config import SQL_CLAUSES
 
 def create_bug_folder():
     folder_name = "bug_" + uuid.uuid4().hex
@@ -56,3 +61,37 @@ def load_csv(csv_name, header, cols):
     df_copy = df.copy()
     df_copy.columns = header
     return df_copy[cols]
+
+def update_count_clauses(query, count):
+    counts = {clause: 0 for clause in SQL_CLAUSES}
+
+    for node in query.walk():
+        if isinstance(node, exp.Select):
+            counts['SELECT'] += 1
+        elif isinstance(node, exp.From):
+            counts['FROM'] += 1
+        elif isinstance(node, exp.Where):
+            counts['WHERE'] += 1
+        elif isinstance(node, exp.Join):
+            counts['JOIN'] += 1
+        elif isinstance(node, exp.Group):
+            counts['GROUP BY'] += 1
+        elif isinstance(node, exp.Order):
+            counts['ORDER BY'] += 1
+
+    for clause, num in counts.items():
+        count[clause].append(num)
+    return count
+
+def get_freq_clauses(count):
+    freqs = {k: float(np.mean(v)) for k, v in count.items()}
+    return freqs
+
+def get_expression_depth(query):
+    if not isinstance(query, Expression) or not query.args:
+        return 1
+    return 1 + max((get_expression_depth(child) for child in query.args.values() if isinstance(child, Expression)), default=0)
+
+def get_validity(query):
+    is_valid = 1
+    return 1 if is_valid else 0
