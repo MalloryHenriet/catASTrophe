@@ -14,17 +14,29 @@
 # 5. version.txt: This file records the SQLite3 version in which the bug was found.
 
 from utils import create_bug_folder, write_file
+from config import BUG_TYPES
 
 class BugRecorder:
     def __init__(self):
         pass
 
-    def report_bug(self, query, version):
+    def report_bug(self, query, version, bug_type):
         # TODO: implement
         path = create_bug_folder()
 
         # 1.
         write_file(path, "original_test.sql", query)
 
+        # 2. TO WRITE MANUALLY FOR EACH BUGS
+
+        # 3.
+        write_file(path, "test.db", "This is the test db")
+
+        # 4.
+        if bug_type == BUG_TYPES[0]:
+            write_file(path, "README.md", "The SQL engine crashed on the given query")
+        elif bug_type == BUG_TYPES[1]:
+            write_file(path, "README.md", "The SQL engine encounter a logic bug")
+
         # 5.
-        write_file(path, "version.txt", version)
+        write_file(path, "version.txt", "\n".join(version))
