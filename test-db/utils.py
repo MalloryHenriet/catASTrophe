@@ -91,3 +91,7 @@ def get_expression_depth(query):
     if not isinstance(query, Expression) or not query.args:
         return 1
     return 1 + max((get_expression_depth(child) for child in query.args.values() if isinstance(child, Expression)), default=0)
+
+def get_validity(query):
+    is_valid = 1
+    return 1 if is_valid else 0

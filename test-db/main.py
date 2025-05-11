@@ -8,7 +8,7 @@ from database_gen import DatabaseGenerator
 import subprocess
 
 from config import VERSIONS, SQL_CLAUSES
-from utils import update_count_clauses, get_freq_clauses, get_expression_depth
+from utils import update_count_clauses, get_freq_clauses, get_expression_depth, get_validity
 
 
 def start_docker_compose():
@@ -27,6 +27,7 @@ def start_docker_compose():
 def main(version):
     sql_clauses_count = {clause: [] for clause in SQL_CLAUSES}
     expression_depth = []
+    query_validity = []
 
     start_docker_compose()
     query_generator = QueryGenerator()
@@ -46,6 +47,7 @@ def main(version):
 
         sql_clauses_count = update_count_clauses(query, sql_clauses_count)
         expression_depth.append(get_expression_depth(query))
+        query_validity.append(get_validity(query))
 
         bug_type, result = runner.run(query.sql(), version, database)
         print(result)
@@ -56,6 +58,8 @@ def main(version):
 
     print(f"Frquency per clauses: {get_freq_clauses(sql_clauses_count)}")
     print(f"Average Expression Depth: {sum(expression_depth) / len(expression_depth)}")
+    print(f"Query Validity: {sum(query_validity) / len(query_validity)}")
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process runs from a specified folder.")
