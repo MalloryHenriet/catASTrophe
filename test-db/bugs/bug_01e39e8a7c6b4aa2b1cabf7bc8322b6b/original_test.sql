@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE rank = '66' AND album = '한 걸음 : 흔적' AND time = '1' AND song_title = '사랑은 지날수록 더욱 선명하게 남아'

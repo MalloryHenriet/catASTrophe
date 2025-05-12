@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2022' AND song_title = 'Dangerously' AND rank = '127' AND album = 'Nine Track Mind (Deluxe)' AND artist = 'Charlie Puth' AND time = '52'

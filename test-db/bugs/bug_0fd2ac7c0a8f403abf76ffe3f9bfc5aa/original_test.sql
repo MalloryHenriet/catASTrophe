@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE album = '사랑의 불시착 OST Part 11'

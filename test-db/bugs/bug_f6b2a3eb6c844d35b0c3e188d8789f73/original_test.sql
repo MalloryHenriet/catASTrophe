@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2017' AND rank = '37' AND album = '1-1=0 (NOTHING WITHOUT YOU)' AND artist = 'Wanna One (워너원)' AND time = '46' AND song_title = 'Wanna Be (My Baby)'

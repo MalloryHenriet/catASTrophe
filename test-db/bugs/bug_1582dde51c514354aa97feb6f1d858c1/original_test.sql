@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2021' AND rank = '177' AND album = 'NUNA' AND artist = '제시(Jessi)' AND time = '20' AND song_title = '눈누난나 (NUNU NANA)'

@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE weight = '61' AND gender = 'M' AND date_of_birth = '5/8/1996' AND height = '180' AND birthplace = 'nan'

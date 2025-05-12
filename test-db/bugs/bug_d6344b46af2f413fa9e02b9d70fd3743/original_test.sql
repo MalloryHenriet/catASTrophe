@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE gender = 'F' AND birthplace = 'Daegu' AND korean_name = '낸시 맥다니' AND weight = '45' AND full_name = 'Nancy Mcdonie' AND instagram = 'nan' AND korean_stage_name = '낸시' AND stage_name = 'Nancy'

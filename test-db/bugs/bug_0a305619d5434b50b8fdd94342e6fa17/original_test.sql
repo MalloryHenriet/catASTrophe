@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = 'Ne-Yo' AND year = '2022' AND rank = '146' AND time = '21'

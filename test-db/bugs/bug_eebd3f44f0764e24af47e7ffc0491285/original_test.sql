@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '정진운 (2am)' AND year = '2011' AND rank = '93' AND time = '49'

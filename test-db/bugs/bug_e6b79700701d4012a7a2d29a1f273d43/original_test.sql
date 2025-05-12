@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE rank = '58' AND time = '14' AND artist = '조정석' AND album = '슬기로운 의사생활 OST Part 3' AND song_title = '아로하'

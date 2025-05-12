@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE stage_name = 'Choi Jiann' AND country = 'South Korea' AND instagram = 'nan'

@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE gender = 'F' AND birthplace = 'Yeongju' AND korean_name = '안지영' AND weight = '0' AND full_name = 'Ahn Jiyoung' AND instagram = 'nan' AND korean_stage_name = '지영' AND stage_name = 'Jiyoung'

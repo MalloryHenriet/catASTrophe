@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE rank = '150' AND time = '23' AND artist = '송이한' AND album = '밝게 빛나는 별이 되어 비춰줄게' AND song_title = '밝게 빛나는 별이 되어 비춰줄게'

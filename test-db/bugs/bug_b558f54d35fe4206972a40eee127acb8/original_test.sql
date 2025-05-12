@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE instagram = 'nan' AND date_of_birth = '10/25/1999' AND group = 'Hashtag' AND korean_name = '권애지' AND country = 'South Korea' AND weight = '0' AND full_name = 'Kwon Aeji'

@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE instagram = 'nan' AND date_of_birth = '8/26/1999' AND group = 'ALICE' AND korean_name = '이채정' AND country = 'South Korea' AND weight = '48' AND full_name = 'Lee Chaejeong'

@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '노을' AND year = '2022' AND rank = '156' AND time = '18'

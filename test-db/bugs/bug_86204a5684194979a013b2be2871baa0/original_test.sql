@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE weight = '0' AND height = '0' AND korean_name = '윤상혁' AND gender = 'M'

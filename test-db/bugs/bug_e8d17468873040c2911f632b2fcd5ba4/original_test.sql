@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE instagram = 'nan' AND date_of_birth = '6/14/2003' AND group = 'STAYC' AND korean_name = '윤세은' AND country = 'South Korea' AND weight = '49' AND full_name = 'Yoon Seeun'

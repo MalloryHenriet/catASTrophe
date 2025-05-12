@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE gender = 'F' AND birthplace = 'nan' AND korean_name = '박유림' AND weight = '0' AND full_name = 'Park Yurim' AND instagram = 'nan' AND korean_stage_name = '유림' AND stage_name = 'Yurim'

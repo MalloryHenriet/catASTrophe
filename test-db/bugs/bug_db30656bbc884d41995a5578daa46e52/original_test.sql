@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE rank = '3' AND time = '51' AND artist = '브라운 아이드 소울 (Brown Eyed Soul)' AND album = 'Browneyed Soul' AND song_title = '똑같다면'

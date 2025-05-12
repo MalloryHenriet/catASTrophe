@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE album = '다시 여기 바닷가'

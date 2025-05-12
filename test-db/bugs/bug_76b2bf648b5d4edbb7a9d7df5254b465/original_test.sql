@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE album = '`사랑해요` 아테나 OST' AND time = '52' AND rank = '2'

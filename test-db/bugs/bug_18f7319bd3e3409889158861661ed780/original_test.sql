@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2016' AND rank = '55' AND album = '스틸' AND artist = '어반 자카파 (Urban Zakapa)' AND time = '23' AND song_title = '아직도 나를 사랑한다면'

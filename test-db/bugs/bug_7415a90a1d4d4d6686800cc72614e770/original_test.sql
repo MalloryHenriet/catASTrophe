@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE full_name = 'Lee Yunji' AND weight = '0' AND gender = 'F'

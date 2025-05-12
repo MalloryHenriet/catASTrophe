@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE rank = '17' AND time = '20' AND artist = '로제 (ROSE)' AND album = 'R' AND song_title = 'On The Ground'

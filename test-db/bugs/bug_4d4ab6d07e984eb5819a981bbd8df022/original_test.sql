@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '포미닛 (4minute)' AND year = '2010' AND rank = '36' AND time = '31'

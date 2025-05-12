@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '김용준' AND year = '2010' AND rank = '100' AND time = '16'

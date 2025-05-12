@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE album = 'VIBE' AND time = '11' AND rank = '15'

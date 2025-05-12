@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE stage_name = 'Nayeon' AND country = 'South Korea' AND instagram = 'nan'

@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2015' AND rank = '98' AND album = 'DAVICHI HUG' AND artist = '다비치' AND time = '18' AND song_title = '행복해서 미안해'

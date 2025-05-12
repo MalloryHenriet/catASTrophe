@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE country = 'Canada' AND korean_stage_name = '기호'
