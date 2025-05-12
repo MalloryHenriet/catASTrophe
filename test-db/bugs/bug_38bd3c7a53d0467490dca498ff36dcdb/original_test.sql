@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE album = '조각집'

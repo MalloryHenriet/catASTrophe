@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE country = 'South Korea'

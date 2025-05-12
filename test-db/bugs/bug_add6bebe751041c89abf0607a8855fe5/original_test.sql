@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE artist = '씨엔블루 (CNBLUE)' AND year = '2010' AND rank = '37' AND time = '31'

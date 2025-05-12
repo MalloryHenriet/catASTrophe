@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE full_name = 'Na Miri' AND weight = '0' AND gender = 'F'

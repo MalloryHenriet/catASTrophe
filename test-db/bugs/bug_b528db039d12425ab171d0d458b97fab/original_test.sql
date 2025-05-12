@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE stage_name = 'Mina' AND country = 'Japan' AND instagram = 'nan'

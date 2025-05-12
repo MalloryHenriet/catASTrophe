@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE instagram = 'nan' AND date_of_birth = '12/9/2005' AND group = 'ENHYPEN' AND korean_name = '니시무라 리키' AND country = 'Japan' AND weight = '0' AND full_name = 'Nishimura Riki'

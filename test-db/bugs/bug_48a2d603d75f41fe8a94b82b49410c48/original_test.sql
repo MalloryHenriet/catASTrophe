@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE rank = '73' AND time = '40' AND artist = '김필' AND album = '이태원 클라쓰 OST Part.6' AND song_title = '그때 그 아인'

@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE weight = '0' AND gender = 'F' AND date_of_birth = '12/9/1996' AND height = '0' AND birthplace = 'Hong Kong'

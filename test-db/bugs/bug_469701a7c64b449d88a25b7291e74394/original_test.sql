@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE time = '42' AND album = 'Monologue' AND song_title = 'Monologue'

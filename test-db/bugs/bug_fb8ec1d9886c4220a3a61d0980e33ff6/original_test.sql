@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE instagram = 'nan' AND date_of_birth = '2/9/2000' AND group = 'IM' AND korean_name = '문태은' AND country = 'South Korea' AND weight = '0' AND full_name = 'Moon Taeeun'

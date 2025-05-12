@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE year = '2011' AND song_title = '울다' AND rank = '41' AND album = '`위대한 탄생 시즌2` 멘토스쿨 Part 1 (이승환편)' AND artist = '에릭남 (Eric Nam)' AND time = '51'

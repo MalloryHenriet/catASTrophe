@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE rank = '63' AND album = '잊어버리지마' AND time = '24' AND song_title = '잊어버리지마 (Feat.태연)'

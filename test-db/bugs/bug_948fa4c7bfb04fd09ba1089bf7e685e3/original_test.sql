@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE rank = '188' AND time = '8' AND artist = '딘딘 (DINDIN)' AND album = '이러면 안 될 거 아는데 너 앞에만 서면 나락' AND song_title = '이러면 안 될 거 아는데 너 앞에만 서면 나락 (Feat. 10CM)'

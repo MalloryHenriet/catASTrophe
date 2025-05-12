@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE full_name = 'Bae Jinyoung' AND weight = '0' AND gender = 'M'

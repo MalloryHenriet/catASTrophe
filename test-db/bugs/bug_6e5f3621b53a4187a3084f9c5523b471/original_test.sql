@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE rank = '55' AND album = 'WE`VE DONE SOMETHING WONDERFUL' AND time = '52' AND song_title = '빈차 (Feat. 오혁)'

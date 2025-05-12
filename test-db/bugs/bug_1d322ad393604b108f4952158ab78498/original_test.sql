@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE full_name = 'Kang Seokhwa' AND weight = '56' AND gender = 'M'

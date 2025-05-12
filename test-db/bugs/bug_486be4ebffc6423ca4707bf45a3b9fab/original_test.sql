@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE rank = '55' AND album = '처음' AND time = '41' AND song_title = '네가 불던 날'

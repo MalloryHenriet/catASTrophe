@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE album = 'Nine Track Mind (Deluxe)' AND time = '44' AND rank = '92'

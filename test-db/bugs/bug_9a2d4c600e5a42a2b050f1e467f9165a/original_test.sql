@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE album = '5th Album `LILAC`' AND time = '17' AND rank = '28'

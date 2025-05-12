@@ -6,6 +6,7 @@ from record_bug import BugRecorder
 from querie_run import QueryRunner
 from database_gen import DatabaseGenerator
 import subprocess
+import os
 
 from config import VERSIONS, SQL_CLAUSES
 from utils import update_count_clauses, get_freq_clauses, get_expression_depth, get_validity
@@ -24,6 +25,104 @@ def start_docker_compose():
         exit(1)
 
 
+# def initialize_database_in_container(version, init_sql_path, db_path='/data/test.db'):
+#     """
+#     Run the SQL init script (test_db.sql) inside the Docker container to populate the test.db file.
+#     """
+#     print(f"Initializing the database in container using {init_sql_path}...")
+
+#     command = [
+#         "docker", "run", "-i", "--rm", "-v", f"{os.getcwd()}:/data",
+#         "theosotr/sqlite3-test", f"/usr/bin/sqlite3-3.26.0" #{version}", db_path
+#     ]
+
+#     try:
+#         with open(init_sql_path, 'r', encoding='utf-8') as f:
+#             sql_script = f.read()
+
+#         result = subprocess.run(
+#             command, input=sql_script, text=True, capture_output=True, check=True
+#         )
+#         print("Database initialized successfully.")
+#         if result.stdout:
+#             print("SQLite output:", result.stdout)
+
+#     except subprocess.CalledProcessError as e:
+#         print("Failed to initialize database in container:")
+#         print(e.stderr)
+#         exit(1)
+
+# def initialize_database_in_container(version, init_sql_path, db_path='/data/test.db'):
+#     print(f"Initializing the database in container using {init_sql_path}...")
+
+#     # Remove previous DB file to avoid schema mismatch
+#     full_db_path = os.path.join(os.getcwd(), db_path.strip("/"))
+#     if os.path.exists(full_db_path):
+#         print("Removing existing test.db to prevent conflicts...")
+#         os.remove(full_db_path)
+
+#     # command = [
+#     #     "docker", "run", "--platform", "linux/amd64", "-i", "--rm",
+#     #     "-v", f"{os.getcwd()}:/data",
+#     #     "theosotr/sqlite3-test", f"/usr/bin/sqlite3-3.26.0", db_path#f"/usr/bin/sqlite3-{version}", db_path
+#     # ]
+#     command = [
+#         "docker", "run", "-i", "--rm", "-v", f"{os.getcwd()}:/data",
+#         "theosotr/sqlite3-test", f"/usr/bin/sqlite3-3.26.0", db_path] #{version}", db_path]
+
+#     try:
+#         with open(init_sql_path, 'r', encoding='utf-8') as f:
+#             sql_script = f.read()
+
+#         result = subprocess.run(
+#             command, input=sql_script, text=True, capture_output=True, check=True
+#         )
+#         print("Database initialized successfully.")
+#         if result.stdout:
+#             print("SQLite output:", result.stdout)
+
+#     except subprocess.CalledProcessError as e:
+#         print("Failed to initialize database in container:")
+#         print(e.stderr.decode())
+#         exit(1)
+
+def initialize_database_in_container(version, init_sql_path, db_path='/data/test.db'):
+    print(f"Initializing the database in container using {init_sql_path}...")
+
+
+
+    host_db_path = os.path.join(os.getcwd(), "test.db")
+    if os.path.exists(host_db_path):
+        print("Removing existing test.db to prevent conflicts...")
+        os.remove(host_db_path)
+
+    command = [
+    "docker", "run", "--platform", "linux/amd64", "-i", "--rm",
+    "-v", f"{os.getcwd()}:/data",
+    "theosotr/sqlite3-test",
+    "/usr/bin/sqlite3-3.26.0", db_path
+]
+
+    try:
+        with open(init_sql_path, 'r', encoding='utf-8') as f:
+            sql_script = f.read()
+
+        result = subprocess.run(
+            command, input=sql_script, text=True, capture_output=True, check=True
+        )
+        print("Database initialized successfully.")
+        if result.stdout:
+            print("SQLite output:", result.stdout)
+
+    except subprocess.CalledProcessError as e:
+        print("Failed to initialize database in container:")
+        print("STDOUT:", e.stdout)
+        print("STDERR:", e.stderr)
+        exit(1)
+
+
+
+
 def main(version):
     sql_clauses_count = {clause: [] for clause in SQL_CLAUSES}
     expression_depth = []
@@ -36,6 +135,7 @@ def main(version):
 
     database_generator = DatabaseGenerator()
     database = database_generator.generate_database()
+    initialize_database_in_container(version, database)
 
     # PQS Loop
     for _ in range(10):

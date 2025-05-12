@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE artist = 'Harry Styles' AND year = '2020' AND rank = '125' AND time = '43'

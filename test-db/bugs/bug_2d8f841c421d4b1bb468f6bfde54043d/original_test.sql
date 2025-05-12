@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE instagram = 'ajol_llama' AND date_of_birth = '9/18/1992' AND group = 'f(x)' AND korean_name = '엠버 조세핀 리우' AND country = 'USA' AND weight = '0' AND full_name = 'Amber Josephine Liu'

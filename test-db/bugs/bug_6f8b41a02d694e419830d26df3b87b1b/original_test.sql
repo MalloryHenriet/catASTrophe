@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE instagram = 'nan' AND date_of_birth = '10/5/1992' AND group = 'Wassup' AND korean_name = '김나리' AND country = 'South Korea' AND weight = '0' AND full_name = 'Kim Nari'

@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE instagram = 'nan' AND date_of_birth = '3/26/2006' AND group = 'TRI.BE' AND korean_name = '수미레' AND country = 'Japan' AND weight = '0' AND full_name = 'Su Mire'

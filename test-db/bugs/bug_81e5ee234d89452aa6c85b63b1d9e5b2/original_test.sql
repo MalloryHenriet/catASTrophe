@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE artist = 'BIGBANG (빅뱅)' AND year = '2017' AND rank = '54' AND time = '19'

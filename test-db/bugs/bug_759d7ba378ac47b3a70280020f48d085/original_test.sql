@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE rank = '18' AND album = '`Super Shy`' AND time = '37' AND song_title = 'New Jeans'

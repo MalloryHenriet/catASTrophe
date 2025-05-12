@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE album = '쇼미더머니 9 Episode 3'
