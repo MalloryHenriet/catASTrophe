@@ -8,6 +8,8 @@ class DatabaseGenerator:
     def __init__(self):
         self.idols_df = None
         self.songs_df = None
+        self.sample_idols = None
+        self.sample_songs = None
 
     def generate_database(self):
         idols_random_cols = random.sample(TABLES_HEADER["kpop_idols"], k=random.randint(1, len(TABLES_HEADER["kpop_idols"])))
@@ -19,8 +21,8 @@ class DatabaseGenerator:
         idols_table = create_table("idols_table", [(col, TABLES_HEADER_WITH_TYPE["kpop_idols"].get(col, "TEXT")) for col in idols_random_cols])
         songs_table = create_table("songs_table", [(col, TABLES_HEADER_WITH_TYPE["kpop_song_rankings"].get(col, "TEXT")) for col in songs_random_cols])
 
-        insert_idols = generate_insert("idols_table", self.idols_df)
-        insert_songs = generate_insert("songs_table", self.songs_df)
+        self.sample_idols, insert_idols = generate_insert("idols_table", self.idols_df)
+        self.sample_songs, insert_songs = generate_insert("songs_table", self.songs_df)
 
         sql_script = "\n\n".join([
             idols_table,
@@ -35,11 +37,11 @@ class DatabaseGenerator:
         return "test_db.sql"
     
     def choose_pivot(self):
-        if self.idols_df is None or self.songs_df is None:
+        if self.sample_idols is None or self.sample_songs is None:
             raise RuntimeError("You must generate a database by calling generate_database() before choosing a pivot.")
         
         table_choice = random.choice(["idols_table", "songs_table"])
-        df = self.idols_df if table_choice == "idols_table" else self.songs_df
+        df = self.sample_idols if table_choice == "idols_table" else self.sample_songs
         pivot = df.sample(1).to_dict(orient="records")[0]
 
         return pivot, table_choice
