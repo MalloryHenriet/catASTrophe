@@ -19,26 +19,23 @@ class QueryRunner:
         :return: The result of the query or error message.
         """
         try:
-            # Ensure that the query is a string
             if not isinstance(query, str):
                 raise ValueError("Query must be a string, but got type: {}".format(type(query)))
 
             # Define the Docker command to run the SQLite query inside the container
             command = [
                 "docker", "run", "-i", "--rm", "-v", f"{os.getcwd()}:/data", 
-                "theosotr/sqlite3-test", f"/usr/bin/sqlite3-{version}", "/data/test.db"
+                "theosotr/sqlite3-test", f"/usr/bin/sqlite3-3.26.0", "/data/test.db"
             ]
             
-            # Print the query to debug and verify it's a string
             print("Executing query:\n", query)
             
-            # Run the Docker command, passing the SQL query as input
             result = subprocess.run(
                 command, input=query, text=True, capture_output=True, check=True
             )
 
-            # Output the result of the query
             print("Query Result:", result.stdout)
+            print("====End of Query Result====")
 
             if result.returncode != 0:
                 return BUG_TYPES[0], result.stderr
