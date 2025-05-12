@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_name = '신지윤' AND gender = 'F' AND country = 'South Korea' AND date_of_birth = '3/2/2002' AND stage_name = 'Jiyoon' AND instagram = 'nan' AND groupname = 'nan'

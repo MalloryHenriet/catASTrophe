@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_stage_name = '용석' AND weight = '64' AND stage_name = 'Yongseok' AND date_of_birth = '1/8/1993' AND instagram = 'nan' AND gender = 'M' AND birthplace = 'Seoul' AND country = 'South Korea'

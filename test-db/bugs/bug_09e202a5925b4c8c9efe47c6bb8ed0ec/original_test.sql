@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2016' AND rank = '48' AND album = '또 오해영 OST Part 5' AND artist = '정승환'

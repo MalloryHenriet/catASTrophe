@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE gender = 'F' AND korean_name = '카츠노 리세' AND stage_name = 'Remi' AND height = '0' AND country = 'Japan' AND korean_stage_name = '레미' AND weight = '0'

@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_name = '김선영' AND korean_stage_name = '아리' AND gender = 'F' AND country = 'South Korea' AND instagram = 'nan' AND date_of_birth = '10/23/1994' AND full_name = 'Kim Sunyoung' AND stage_name = 'Ari' AND birthplace = 'Daegu' AND weight = '0' AND groupname = 'Tahiti'

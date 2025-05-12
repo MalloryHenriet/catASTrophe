@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE stage_name = 'Yuku' AND height = '176' AND instagram = 'nan' AND gender = 'M' AND full_name = 'Amanumu Yuku'

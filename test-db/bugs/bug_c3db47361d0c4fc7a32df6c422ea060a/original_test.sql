@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE gender = 'F' AND weight = '0' AND instagram = 'hichaheebye' AND height = '167'

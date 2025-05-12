@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2023' AND rank = '117' AND album = '시작은 첫키스 OST Part.7' AND artist = '이창섭'

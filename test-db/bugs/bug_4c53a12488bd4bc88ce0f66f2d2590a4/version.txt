@@ -1,2 +1,0 @@
-/usr/bin/sqlite3-3.26.0
-/usr/bin/sqlite3-3.39.4

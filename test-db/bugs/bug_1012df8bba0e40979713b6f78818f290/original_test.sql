@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '박혜경' AND rank = '98' AND album = '썸싱 스페셜 (Something Special)' AND song_title = '썸싱 스페셜 (Something Special)'

@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2021' AND rank = '173' AND album = '너 하나야 (낮에 뜨는 달 X 길구봉구) OST' AND artist = '길구봉구'

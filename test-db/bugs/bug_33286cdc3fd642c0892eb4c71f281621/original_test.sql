@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE stage_name = 'Solbin' AND height = '169' AND instagram = 'nan' AND gender = 'F' AND full_name = 'Ahn Solbin'

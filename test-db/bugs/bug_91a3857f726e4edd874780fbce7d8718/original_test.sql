@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE gender = 'M' AND groupname = 'Boyfriend'

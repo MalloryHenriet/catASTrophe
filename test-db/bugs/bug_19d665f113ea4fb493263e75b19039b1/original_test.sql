@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_stage_name = '카이' AND weight = '65' AND stage_name = 'Kai' AND date_of_birth = '1/14/1994' AND instagram = 'nan' AND gender = 'M' AND birthplace = 'Suncheon' AND country = 'South Korea'

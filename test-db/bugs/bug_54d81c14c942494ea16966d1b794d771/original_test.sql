@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2017' AND rank = '61' AND album = '반창고' AND artist = 'MC 몽, 허각'

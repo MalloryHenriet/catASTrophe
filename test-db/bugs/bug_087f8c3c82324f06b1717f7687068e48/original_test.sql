@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '케이윌 (K.will)' AND rank = '67' AND album = 'RE:' AND song_title = '꽃이 핀다'

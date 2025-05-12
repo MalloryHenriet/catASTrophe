@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '김민석' AND rank = '30' AND album = '취중고백' AND song_title = '취중고백'

@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE time = '28' AND year = '2023'

@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE country = 'China' AND korean_stage_name = '이런' AND instagram = 'nan'

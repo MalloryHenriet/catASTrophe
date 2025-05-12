@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = 'LE SSERAFIM (르세라핌)' AND rank = '62' AND album = 'UNFORGIVEN' AND song_title = '이브, 프시케 그리고 푸른 수염의 아내'

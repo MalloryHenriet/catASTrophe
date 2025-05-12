@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE rank = '90' AND time = '44' AND song_title = 'Youth' AND album = 'YOUTH' AND year = '2022'

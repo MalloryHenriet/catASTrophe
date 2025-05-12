@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2023' AND rank = '11' AND album = 'UNFORGIVEN' AND artist = 'LE SSERAFIM (르세라핌)'

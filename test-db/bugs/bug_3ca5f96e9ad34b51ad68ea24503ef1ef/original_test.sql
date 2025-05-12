@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2011' AND rank = '86' AND album = '장기하와 얼굴들' AND artist = '장기하와 얼굴들'

@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_name = '경한별' AND korean_stage_name = '한별' AND gender = 'F' AND country = 'South Korea' AND instagram = 'nan' AND date_of_birth = '7/1/2005' AND full_name = 'Kyung Hanbyul' AND stage_name = 'Hanbyul' AND birthplace = 'Seoul' AND weight = '49' AND groupname = 'PRECIOUS'

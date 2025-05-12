@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_stage_name = '연희' AND weight = '0' AND stage_name = 'Yeonhee' AND date_of_birth = '12/6/2000' AND instagram = 'nan' AND gender = 'F' AND birthplace = 'nan' AND country = 'South Korea'
