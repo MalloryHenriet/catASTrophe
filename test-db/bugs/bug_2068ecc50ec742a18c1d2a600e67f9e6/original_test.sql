@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE artist = '노을' AND rank = '6' AND album = '보이지 않는 것들' AND song_title = '목소리'

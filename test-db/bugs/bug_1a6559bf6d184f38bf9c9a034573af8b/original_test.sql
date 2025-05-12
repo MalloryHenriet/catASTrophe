@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE korean_stage_name = '채영' AND weight = '0' AND stage_name = 'Chaeyoung' AND date_of_birth = '5/14/2000' AND instagram = 'nan' AND gender = 'F' AND birthplace = 'Pohang' AND country = 'South Korea'

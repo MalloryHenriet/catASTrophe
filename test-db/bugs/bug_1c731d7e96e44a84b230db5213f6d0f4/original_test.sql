@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE groupname = 'NMIXX' AND full_name = 'Oh Haewon'

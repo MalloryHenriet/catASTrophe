@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE gender = 'F' AND groupname = 'Gfriend'

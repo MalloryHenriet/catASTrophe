@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE album = '÷ (Deluxe)' AND time = '31' AND song_title = 'Shape of You' AND artist = 'Ed Sheeran'

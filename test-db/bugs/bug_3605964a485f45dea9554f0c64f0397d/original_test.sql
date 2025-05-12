@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE groupname = 'STAYC' AND full_name = 'Bae Sumin'

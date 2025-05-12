@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE time = '25' AND year = '2020'

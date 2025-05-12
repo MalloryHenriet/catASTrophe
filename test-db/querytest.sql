@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE instagram = 'nan' AND stage_name = 'Yue' AND korean_name = '낸시 양' AND date_of_birth = '7/3/2004' AND full_name = 'Nancy Yang' AND groupname = 'Lapillus' AND weight = '48' AND country = 'USA' AND korean_stage_name = '유에' AND height = '163' AND birthplace = 'nan' AND gender = 'F'

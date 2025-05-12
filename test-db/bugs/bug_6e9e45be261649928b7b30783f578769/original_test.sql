@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE stage_name = 'Yua' AND height = '0' AND instagram = 'nan' AND gender = 'F' AND full_name = 'Mikami Yua'

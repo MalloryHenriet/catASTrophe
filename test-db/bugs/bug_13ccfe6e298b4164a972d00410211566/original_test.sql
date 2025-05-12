@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE gender = 'F' AND korean_name = '이용화' AND stage_name = 'Elva' AND height = '0' AND country = 'South Korea' AND korean_stage_name = '엘바' AND weight = '0'

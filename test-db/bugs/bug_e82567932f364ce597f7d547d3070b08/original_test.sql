@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE year = '2015' AND rank = '98' AND album = 'Tough Cookie' AND artist = '지코 (ZICO)'

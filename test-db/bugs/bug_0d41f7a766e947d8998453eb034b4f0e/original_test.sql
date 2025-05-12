@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE gender = 'M' AND weight = '0' AND instagram = 'nan' AND height = '0'

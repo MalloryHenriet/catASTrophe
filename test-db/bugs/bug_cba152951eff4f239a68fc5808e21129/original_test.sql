@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE korean_name = '소유진' AND gender = 'F' AND country = 'South Korea' AND date_of_birth = '6/18/1994' AND stage_name = 'Yujin' AND instagram = 'nan' AND groupname = 'Playback'

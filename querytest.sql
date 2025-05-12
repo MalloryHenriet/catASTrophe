@@ -1,0 +1,5 @@
+-- query = """
+CREATE TABLE IF NOT EXISTS t0 (c0 INTEGER);
+INSERT INTO t0 (c0) VALUES (1);
+SELECT * FROM t0 WHERE c0 = 1;
+-- """

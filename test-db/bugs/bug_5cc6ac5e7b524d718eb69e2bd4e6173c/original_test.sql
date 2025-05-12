@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE korean_stage_name = '와이와이' AND weight = '0' AND stage_name = 'YY' AND date_of_birth = '8/30/1991' AND instagram = 'nan' AND gender = 'M' AND birthplace = 'nan' AND country = 'South Korea'

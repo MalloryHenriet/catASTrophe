@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE album = '언프리티 랩스타 Track 6' AND song_title = '아무도 모르게 (Prod. by MC몽)' AND rank = '7' AND artist = '치타, 에일리' AND year = '2015'

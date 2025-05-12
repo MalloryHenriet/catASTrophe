@@ -23,7 +23,7 @@ class QueryGenerator:
     def generate_query_for_pivot(self, pivot, table_name):
         conditions = []
         for col, value in pivot.items():
-            if value is None:
+            if value is None: #TODO: nan vs NULL?
                 conditions.append(exp.Is(this=exp.Column(this=col), expression=exp.Null()))
             else:
                 literal = exp.Literal.string(str(value))

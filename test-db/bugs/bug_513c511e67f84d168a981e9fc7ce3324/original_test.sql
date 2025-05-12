@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE groupname = 'NINE.i' AND full_name = 'Kim Minjun'

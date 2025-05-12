@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE country = 'South Korea' AND korean_stage_name = '유영' AND instagram = 'hv_u0'

@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE groupname = 'EPEX' AND full_name = 'Kim Hyunwoo'

@@ -1,3 +1,1 @@
-CREATE TABLE t0 ( c0 INT );
-INSERT INTO t0 ( c0 ) VALUES (1);
-SELECT * FROM t0 WHERE 1 = 1;
+SELECT * FROM idols_table WHERE date_of_birth = '2/20/2002'
