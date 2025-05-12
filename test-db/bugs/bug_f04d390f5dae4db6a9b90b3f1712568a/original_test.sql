@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE year = '2021' AND rank = '95' AND album = 'MSG워너비 TOP 8 경연곡' AND artist = 'MSG워너비 TOP 8 (별루지, 김정수, 강창모, 정기석, 이동휘, 이상이, 박재정, 원슈타인 (Wonstein))' AND time = '40' AND song_title = '상상더하기'

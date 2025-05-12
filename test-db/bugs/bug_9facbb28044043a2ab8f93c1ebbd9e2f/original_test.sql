@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE gender = 'M' AND birthplace = 'nan' AND korean_name = '이회택' AND weight = '0' AND full_name = 'Lee Hwitaek' AND instagram = 'nan' AND korean_stage_name = '후이' AND stage_name = 'Hui'

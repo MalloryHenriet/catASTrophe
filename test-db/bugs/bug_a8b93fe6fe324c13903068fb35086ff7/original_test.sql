@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE year = '2016' AND rank = '81' AND album = '또 다시 사랑' AND artist = '임창정' AND time = '33' AND song_title = '또 다시 사랑'

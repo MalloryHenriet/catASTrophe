@@ -124,6 +124,7 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
 
 
 def main(version):
+    print("version!!",  version)
     sql_clauses_count = {clause: [] for clause in SQL_CLAUSES}
     expression_depth = []
     query_validity = []
