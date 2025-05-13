@@ -30,7 +30,7 @@ class QueryGenerator:
             if random.choice([True, False]):
                 condition = exp.Is(this=column, expression=exp.Null())
             else:
-                condition = exp.IsNot(this=column, expression=exp.Null())
+                condition = exp.Not(this=exp.Is(this=column, expression=exp.Null()))
         else:
             if isinstance(value, str):
                 literal = exp.Literal.string(value)
