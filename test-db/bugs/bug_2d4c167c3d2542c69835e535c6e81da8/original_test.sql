@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE album = '봉춤을 추네' AND year = '2022' AND time = '40' AND artist = '잔나비' AND song_title = '사랑하긴 했었나요 스쳐가는 인연이었나요 짧지않은 우리 함께했던 시간들이 자꾸 내 마음을 가둬두네' AND rank = '89'

@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE groupname = 'Sonamoo' AND stage_name = 'Sumin' AND birthplace = 'Yongin' AND weight = '0' AND date_of_birth = '3/3/1994' AND country = 'South Korea' AND korean_name = '지수민' AND gender = 'F' AND full_name = 'Ji Sumin' AND korean_stage_name = '수민' AND instagram = 'nan'

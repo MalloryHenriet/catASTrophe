@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE rank = '28' AND artist = 'WSG워너비 (4FIRE)'

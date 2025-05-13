@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE weight = '0' AND korean_name = '정다솔' AND height = '0' AND date_of_birth = '5/28/1995' AND korean_stage_name = '이연' AND instagram = 'nan' AND stage_name = 'Yiyeon'

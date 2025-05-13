@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE korean_name = '김상민'

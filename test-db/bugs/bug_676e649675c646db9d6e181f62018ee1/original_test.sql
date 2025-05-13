@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE year = '2015' AND song_title = 'SHAKE IT'

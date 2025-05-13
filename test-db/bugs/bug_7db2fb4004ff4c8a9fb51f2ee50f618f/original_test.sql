@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE song_title = '다시 난, 여기' AND time = '3' AND rank = '4'

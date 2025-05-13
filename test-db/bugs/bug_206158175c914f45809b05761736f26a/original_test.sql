@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE groupname = 'LE SSERAFIM' AND stage_name = 'Kazuha' AND birthplace = 'Osaka' AND weight = '0' AND date_of_birth = '8/9/2003' AND country = 'Japan' AND korean_name = '나카무라 카즈하' AND gender = 'F' AND full_name = 'Nakamura Kazuha' AND korean_stage_name = '카즈하' AND instagram = 'nan'

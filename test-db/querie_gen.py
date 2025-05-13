@@ -24,7 +24,7 @@ class QueryGenerator:
         conditions = []
         for col, value in pivot.items():
             if value is None: #TODO: nan vs NULL?
-                conditions.append(exp.Is(this=exp.Column(this=col), expression=exp.Null()))
+                conditions.append(exp.Is(this=exp.Column(this=col), expression="nan"))#expression=exp.Null()))
             else:
                 literal = exp.Literal.string(str(value))
                 conditions.append(exp.EQ(this=exp.Column(this=col), expression=literal))

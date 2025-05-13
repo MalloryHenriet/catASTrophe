@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE artist = '백아' AND year = '2023' AND time = '13' AND rank = '96'

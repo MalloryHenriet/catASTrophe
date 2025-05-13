@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE korean_name = '리원한' AND gender = 'M' AND groupname = 'UNIQ' AND korean_stage_name = '원한' AND date_of_birth = '7/22/1994' AND full_name = 'Li Wenhan' AND height = '180' AND stage_name = 'Wenhan' AND weight = '64' AND country = 'China'

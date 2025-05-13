@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE artist = '임영웅' AND year = '2023' AND time = '17' AND rank = '158'

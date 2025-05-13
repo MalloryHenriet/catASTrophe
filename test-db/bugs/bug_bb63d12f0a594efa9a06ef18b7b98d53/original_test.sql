@@ -1,0 +1,1 @@
+SELECT * FROM songs_table WHERE rank = '54' AND artist = '방탄소년단'

@@ -1,0 +1,1 @@
+The SQL engine crashed on the given query
