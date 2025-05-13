@@ -17,11 +17,21 @@ import random
 import math
 from sqlglot import exp, select
 
+from config import NUMERIC_COLS
+
 operators = ['=', '!=', '<', '>', 'LIKE']
+arithmetic = ['+', '-', '*', '/', '%']
 
 class QueryGenerator:
     def __init__(self):
         pass
+
+    def random_numerical_arithmetic(expr):
+        if random.random() < 0.5:  # 50% chance to fuzz
+            op = random.choice(arithmetic)
+            operand = exp.Literal.number(random.randint(1, 5))
+            return exp.Binary(this=exp, expression=operand, op=op)
+        return expr
 
     def get_condition(self, value, col):
         print(f"DEBUG: Column={col}, Value={value}, Type={type(value)}")
@@ -32,6 +42,9 @@ class QueryGenerator:
             else:
                 condition = exp.Not(this=exp.Is(this=column, expression=exp.Null()))
         else:
+            if col in NUMERIC_COLS and isinstance(value, (int, float)):
+                col = self.random_numerical_arithmetic(col)
+                
             if isinstance(value, str):
                 literal = exp.Literal.string(value)
             elif isinstance(value, (int, float)):
