@@ -1,1 +1,1 @@
-SELECT * FROM idols_table WHERE korean_name = '문현아' AND gender = 'F' AND groupname = 'nan' AND korean_stage_name = '현아' AND date_of_birth = '1/19/1987' AND full_name = 'Moon Hyuna' AND height = '172' AND stage_name = 'Hyuna' AND weight = '50' AND country = 'South Korea'
+SELECT * FROM idols_table WHERE stage_name = 'Gowoon' AND korean_name = '문유정' AND korean_stage_name = '고운' AND weight = '0' AND height = '167' AND instagram = 'nan' AND groupname = 'Berry Good' AND date_of_birth = '12/18/1998' AND gender = 'F'

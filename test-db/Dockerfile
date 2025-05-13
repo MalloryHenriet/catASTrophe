@@ -1,12 +1,12 @@
-FROM python:3.10-slim
+# FROM python:3.10-slim
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY . .
+# COPY . .
 
-RUN pip install -r requirements.txt
+# RUN pip install -r requirements.txt
 
-CMD ["python", "main.py"]
+# CMD ["python", "main.py"]
 
 
 

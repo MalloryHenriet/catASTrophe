@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_name = '윤예진' AND instagram = 'nan' AND full_name = 'Yoon Yejin' AND groupname = 'nan' AND date_of_birth = '5/24/1991' AND height = '0' AND birthplace = 'nan' AND weight = '0'

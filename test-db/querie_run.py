@@ -94,17 +94,33 @@ class QueryRunner:
                 raise ValueError("Query must be a string.")
 
             # Save query to host-mounted file
-            query_path = os.path.join(os.getcwd(), "query.sql")
+            query_path = os.path.join(os.getcwd(), 'shared', "query.sql")
             with open(query_path, "w", encoding="utf-8") as f:
                 f.write(query)
 
+            output_lines = database.splitlines()
+            for i, line in enumerate(output_lines[:100]):  # Limit to first 100 lines
+                print("database line :",line)
             # Run query using docker exec inside the running container
             docker_cmd = [
                 "docker", "exec", "-i",
                 self.sqlite_container_name,
                 "bash", "-c",
-                f"./sqlite3 {database} < /data/query.sql && sleep 1"
+                "./sqlite3 /data/test.db < /data/query.sql && sleep 1"
             ]
+
+            print("\nContents of the database:")
+
+            # Query the database to show the tables and their contents
+            show_tables_cmd = [
+                "docker", "exec", "-i",
+                self.sqlite_container_name,
+                "bash", "-c",
+                f"./sqlite3 {database} '.tables'"
+            ]
+            tables_result = subprocess.run(show_tables_cmd, capture_output=True, text=True)
+            print("Tables in the database:\n", tables_result.stdout)
+
 
             # Optional: List coverage files inside the container
             list_cmd = [
@@ -134,6 +150,8 @@ class QueryRunner:
             gcov_result = subprocess.run(docker_gcov, capture_output=True, text=True)
             print("gcov_result: ", gcov_result.stdout)
             print("gcov_result_err: ", gcov_result.stderr)
+
+
 
             if result.returncode != 0:
                 return "CRASH", result.stderr
