@@ -84,16 +84,35 @@ class QueryGenerator:
             having_cond = self.get_condition(random.choice(list(pivot.values())), random.choice(list(pivot.keys())))
             query = query.having(having_cond)
 
-        if random.random() < 0.2:
+        # ALL THE WEIRD QUERIES
+        if random.random() < 0.01:
             query = select("1 = 1 AND 1 = 0").from_(table_name)
 
-        if random.random() < 0.1:
+        if random.random() < 0.01:
             # Create syntactically invalid expression
             query = select("COUNT(SELECT * FROM table)")
 
-        if random.random() < 0.1:
+        if random.random() < 0.01:
             # Add ambiguous alias
             query = select("name AS age", "age").from_(table_name).order_by("age")
+
+        if random.random() < 0.01:
+            # Test edge cases
+            query = select().from_(table_name).select(
+                exp.EQ(
+                    this=exp.Column(this="weight"),
+                    expression=exp.Literal.number("-9223372036854775809")
+                )
+            )
+
+        if random.random() < 0.01:
+            # Test exponential cases
+            query = select().from_(table_name).select(
+                exp.EQ(
+                    this=exp.Column(this="weight"),
+                    expression=exp.Literal.number("1E28475")
+                )
+            )
         
         return query
 

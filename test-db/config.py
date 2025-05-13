@@ -14,3 +14,5 @@ TABLES_HEADER_WITH_TYPE = {
     "kpop_idols": {"stage_name": "TEXT", "full_name": "TEXT", "korean_name": "TEXT", "korean_stage_name": "TEXT", "date_of_birth": "TEXT", "groupname": "TEXT", "country": "TEXT", "height": "INT", "weight": "INT", "birthplace": "TEXT", "gender": "TEXT", "instagram": "TEXT"},
     "kpop_song_rankings": {"year": "INT", "time": "INT", "rank": "INT", "song_title": "TEXT", "artist": "TEXT", "album": "TEXT"}
 }
+
+NUMERIC_COLS = ["height", "weight", "year", "rank", "time"]
