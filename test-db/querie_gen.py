@@ -23,6 +23,7 @@ class QueryGenerator:
         pass
 
     def get_condition(self, value, col):
+        print(f"DEBUG: Column={col}, Value={value}, Type={type(value)}")
         column = exp.Column(this=col)
         if value is None:
             if random.choice([True, False]):
