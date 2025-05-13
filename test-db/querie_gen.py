@@ -26,8 +26,8 @@ class QueryGenerator:
     def __init__(self):
         pass
 
-    def random_numerical_arithmetic(expr):
-        if random.random() < 0.5:  # 50% chance to fuzz
+    def random_numerical_arithmetic(self, expr):
+        if random.random() < 0.5:
             op = random.choice(arithmetic)
             operand = exp.Literal.number(random.randint(1, 5))
             return exp.Binary(this=exp, expression=operand, op=op)
@@ -41,28 +41,30 @@ class QueryGenerator:
                 condition = exp.Is(this=column, expression=exp.Null())
             else:
                 condition = exp.Not(this=exp.Is(this=column, expression=exp.Null()))
-        else:
-            if col in NUMERIC_COLS and isinstance(value, (int, float)):
-                col = self.random_numerical_arithmetic(col)
+        
+        if col in NUMERIC_COLS and isinstance(value, (int, float)):
+            column = self.random_numerical_arithmetic(column)
                 
-            if isinstance(value, str):
-                literal = exp.Literal.string(value)
-            elif isinstance(value, (int, float)):
-                literal = exp.Literal.number(value)
-            else:
-                literal = exp.Literal.string(str(value))
-            operation = random.choice(operators)
-            if operation == '=':
-                condition = exp.EQ(this=column, expression=literal)
-            elif operation == '!=':
-                condition = exp.NEQ(this=column, expression=literal)
-            elif operation == '<':
-                condition = exp.LT(this=column, expression=literal)
-            elif operation == '>':
-                condition = exp.GT(this=column, expression=literal)
-            elif operation == 'LIKE':
-                pattern = f"%{str(value)}%"
-                condition = exp.Like(this=column, expression=exp.Literal.string(pattern))
+        if isinstance(value, str):
+            literal = exp.Literal.string(value)
+        elif isinstance(value, (int, float)):
+            literal = exp.Literal.number(value)
+        else:
+            literal = exp.Literal.string(str(value))
+
+        operation = random.choice(operators)
+        if operation == '=':
+            condition = exp.EQ(this=column, expression=literal)
+        elif operation == '!=':
+            condition = exp.NEQ(this=column, expression=literal)
+        elif operation == '<':
+            condition = exp.LT(this=column, expression=literal)
+        elif operation == '>':
+            condition = exp.GT(this=column, expression=literal)
+        elif operation == 'LIKE':
+            pattern = f"%{str(value)}%"
+            condition = exp.Like(this=column, expression=exp.Literal.string(pattern))
+
         return condition
 
     def generate_query_for_pivot(self, pivot, table_name):
