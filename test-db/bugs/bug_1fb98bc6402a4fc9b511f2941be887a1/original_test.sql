@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_name = '킴 스티븐' AND gender = 'M' AND groupname = 'Luminous' AND korean_stage_name = '스티븐' AND date_of_birth = '1/17/2000' AND full_name = 'Kim Steven' AND height = '176' AND stage_name = 'Steven' AND weight = '57' AND country = 'South Korea'

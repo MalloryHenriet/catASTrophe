@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_name = '문현아' AND gender = 'F' AND groupname = 'nan' AND korean_stage_name = '현아' AND date_of_birth = '1/19/1987' AND full_name = 'Moon Hyuna' AND height = '172' AND stage_name = 'Hyuna' AND weight = '50' AND country = 'South Korea'

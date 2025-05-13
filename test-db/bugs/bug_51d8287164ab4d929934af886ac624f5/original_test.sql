@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE weight = '63' AND korean_name = '양희찬' AND height = '176' AND date_of_birth = '7/31/1999' AND korean_stage_name = '희찬' AND instagram = 'nan' AND stage_name = 'Heechan'

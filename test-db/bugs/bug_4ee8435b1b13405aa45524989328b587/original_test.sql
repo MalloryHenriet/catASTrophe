@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '장민호' AND year = '2020' AND time = '24' AND rank = '110'

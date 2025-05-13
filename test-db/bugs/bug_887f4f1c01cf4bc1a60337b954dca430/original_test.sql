@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE year = '2017' AND song_title = '무제(無題) (Untitled, 2014)'

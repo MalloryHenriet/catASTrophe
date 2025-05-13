@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_name = '심예린'

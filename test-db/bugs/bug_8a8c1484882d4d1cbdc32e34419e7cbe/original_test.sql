@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE birthplace = 'nan' AND date_of_birth = '11/6/1999' AND korean_name = '김민혁' AND country = 'South Korea' AND gender = 'M' AND full_name = 'Kim Minhyuk' AND instagram = 'nan' AND korean_stage_name = '민혁'

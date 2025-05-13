@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE full_name = 'Kwon Soobin' AND korean_name = '김수빈' AND instagram = 'nan' AND height = '0' AND groupname = 'Hot Blood Youth' AND stage_name = 'Bin' AND korean_stage_name = '빈' AND country = 'South Korea' AND gender = 'M'

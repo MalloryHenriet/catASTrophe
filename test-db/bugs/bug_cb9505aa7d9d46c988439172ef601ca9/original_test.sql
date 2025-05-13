@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE korean_name = '김소희' AND gender = 'F' AND groupname = 'Rocket Punch' AND korean_stage_name = '소희' AND date_of_birth = '8/14/2003' AND full_name = 'Kim Sohee' AND height = '161' AND stage_name = 'Sohee' AND weight = '46' AND country = 'South Korea'

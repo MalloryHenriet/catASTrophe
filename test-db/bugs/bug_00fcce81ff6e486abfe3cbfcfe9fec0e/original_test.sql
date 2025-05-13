@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE album = '딴따라 OST Part 5' AND artist = '개코' AND year = '2016' AND song_title = '사진 찍어 보내 줘'

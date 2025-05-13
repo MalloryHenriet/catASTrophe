@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE birthplace = 'nan' AND date_of_birth = '7/6/1993' AND korean_name = '송창규' AND country = 'South Korea' AND gender = 'M' AND full_name = 'Song Changgyu' AND instagram = 'nan' AND korean_stage_name = '창규'

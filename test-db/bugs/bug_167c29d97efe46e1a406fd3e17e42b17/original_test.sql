@@ -1,1 +1,0 @@
-SELECT * FROM songs_table WHERE artist = '잔나비' AND year = '2020' AND time = '43' AND rank = '120'

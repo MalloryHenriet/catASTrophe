@@ -1,1 +1,0 @@
-SELECT * FROM idols_table WHERE height = '0' AND gender = 'M' AND date_of_birth = '10/31/1992' AND korean_stage_name = '호준' AND weight = '0'
