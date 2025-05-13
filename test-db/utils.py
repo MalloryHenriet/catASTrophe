@@ -53,7 +53,7 @@ def generate_insert(table_name, df):
         values.append(f"({row_values})")
 
     columns = ", ".join(df.columns)
-    return f"INSERT INTO {table_name} ({columns}) VALUES\n" + ",\n".join(values) + ";"
+    return sampled_df, f"INSERT INTO {table_name} ({columns}) VALUES\n" + ",\n".join(values) + ";"
 
 
 def load_csv(csv_name, header, cols):
@@ -78,6 +78,10 @@ def update_count_clauses(query, count):
             counts['GROUP BY'] += 1
         elif isinstance(node, exp.Order):
             counts['ORDER BY'] += 1
+        elif isinstance(node, exp.Having):
+            counts['HAVING'] += 1
+        elif isinstance(node, exp.Limit):
+            counts['LIMIT'] += 1
 
     for clause, num in counts.items():
         count[clause].append(num)
