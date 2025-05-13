@@ -1,130 +1,21 @@
+
 # Main file
 import argparse
+
+from docker_utils import start_docker_compose, initialize_database_in_container
 
 from querie_gen import QueryGenerator
 from record_bug import BugRecorder
 from querie_run import QueryRunner
 from database_gen import DatabaseGenerator
-import subprocess
-import os
 
 from config import VERSIONS, SQL_CLAUSES
 from utils import update_count_clauses, get_freq_clauses, get_expression_depth, get_validity
 
 
-def start_docker_compose():
-    try:
-        # Run docker-compose up in the background
-        print("Starting Docker Compose...")
-        result = subprocess.run(['docker', 'compose', 'up', '-d'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        print("Docker Compose started successfully.")
-        print(result.stdout.decode())  # Optional: Print the output from the command
-    except subprocess.CalledProcessError as e:
-        print("Error starting Docker Compose:")
-        print(e.stderr.decode())  # Optional: Print the error output
-        exit(1)
-
-
-# def initialize_database_in_container(version, init_sql_path, db_path='/data/test.db'):
-#     """
-#     Run the SQL init script (test_db.sql) inside the Docker container to populate the test.db file.
-#     """
-#     print(f"Initializing the database in container using {init_sql_path}...")
-
-#     command = [
-#         "docker", "run", "-i", "--rm", "-v", f"{os.getcwd()}:/data",
-#         "theosotr/sqlite3-test", f"/usr/bin/sqlite3-3.26.0" #{version}", db_path
-#     ]
-
-#     try:
-#         with open(init_sql_path, 'r', encoding='utf-8') as f:
-#             sql_script = f.read()
-
-#         result = subprocess.run(
-#             command, input=sql_script, text=True, capture_output=True, check=True
-#         )
-#         print("Database initialized successfully.")
-#         if result.stdout:
-#             print("SQLite output:", result.stdout)
-
-#     except subprocess.CalledProcessError as e:
-#         print("Failed to initialize database in container:")
-#         print(e.stderr)
-#         exit(1)
-
-# def initialize_database_in_container(version, init_sql_path, db_path='/data/test.db'):
-#     print(f"Initializing the database in container using {init_sql_path}...")
-
-#     # Remove previous DB file to avoid schema mismatch
-#     full_db_path = os.path.join(os.getcwd(), db_path.strip("/"))
-#     if os.path.exists(full_db_path):
-#         print("Removing existing test.db to prevent conflicts...")
-#         os.remove(full_db_path)
-
-#     # command = [
-#     #     "docker", "run", "--platform", "linux/amd64", "-i", "--rm",
-#     #     "-v", f"{os.getcwd()}:/data",
-#     #     "theosotr/sqlite3-test", f"/usr/bin/sqlite3-3.26.0", db_path#f"/usr/bin/sqlite3-{version}", db_path
-#     # ]
-#     command = [
-#         "docker", "run", "-i", "--rm", "-v", f"{os.getcwd()}:/data",
-#         "theosotr/sqlite3-test", f"/usr/bin/sqlite3-3.26.0", db_path] #{version}", db_path]
-
-#     try:
-#         with open(init_sql_path, 'r', encoding='utf-8') as f:
-#             sql_script = f.read()
-
-#         result = subprocess.run(
-#             command, input=sql_script, text=True, capture_output=True, check=True
-#         )
-#         print("Database initialized successfully.")
-#         if result.stdout:
-#             print("SQLite output:", result.stdout)
-
-#     except subprocess.CalledProcessError as e:
-#         print("Failed to initialize database in container:")
-#         print(e.stderr.decode())
-#         exit(1)
-
-def initialize_database_in_container(version, init_sql_path, db_path='/data/test.db'):
-    print(f"Initializing the database in container using {init_sql_path}...")
-
-
-
-    host_db_path = os.path.join(os.getcwd(), "test.db")
-    if os.path.exists(host_db_path):
-        print("Removing existing test.db to prevent conflicts...")
-        os.remove(host_db_path)
-
-    command = [
-    "docker", "run", "--platform", "linux/amd64", "-i", "--rm",
-    "-v", f"{os.getcwd()}:/data",
-    "theosotr/sqlite3-test",
-    "/usr/bin/sqlite3-3.26.0", db_path
-]
-
-    try:
-        with open(init_sql_path, 'r', encoding='utf-8') as f:
-            sql_script = f.read()
-
-        result = subprocess.run(
-            command, input=sql_script, text=True, capture_output=True, check=True
-        )
-        print("Database initialized successfully.")
-        if result.stdout:
-            print("SQLite output:", result.stdout)
-
-    except subprocess.CalledProcessError as e:
-        print("Failed to initialize database in container:")
-        print("STDOUT:", e.stdout)
-        print("STDERR:", e.stderr)
-        exit(1)
-
-
-
 
 def main(version):
-    print("version!!",  version)
+    
     sql_clauses_count = {clause: [] for clause in SQL_CLAUSES}
     expression_depth = []
     query_validity = []
@@ -139,12 +30,12 @@ def main(version):
     initialize_database_in_container(version, database)
 
     # PQS Loop
-    for _ in range(10):
+    for _ in range(5):
         pivot, table_name = database_generator.choose_pivot()
         print(pivot)
 
         query = query_generator.generate_query_for_pivot(pivot, table_name)
-        print(query)
+        
 
         sql_clauses_count = update_count_clauses(query, sql_clauses_count)
         expression_depth.append(get_expression_depth(query))

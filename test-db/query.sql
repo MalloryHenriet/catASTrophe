@@ -1,3 +1,1 @@
-CREATE TABLE t0 ( c0 INT );
-INSERT INTO t0 ( c0 ) VALUES (1);
-SELECT * FROM t0 WHERE 1 = 1;
+SELECT * FROM idols_table WHERE stage_name = 'Gowoon' AND korean_name = '문유정' AND korean_stage_name = '고운' AND weight = '0' AND height = '167' AND instagram = 'nan' AND groupname = 'Berry Good' AND date_of_birth = '12/18/1998' AND gender = 'F'
