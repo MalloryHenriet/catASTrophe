@@ -14,6 +14,7 @@
 # We are going to use the 2 datasets kpop_idols and kpop_ranking for query generation
 
 import random
+import math
 from sqlglot import exp, select
 
 operators = ['=', '!=', '<', '>', 'LIKE']
@@ -23,12 +24,13 @@ class QueryGenerator:
         pass
 
     def get_condition(self, value, col):
+        print(f"DEBUG: Column={col}, Value={value}, Type={type(value)}")
         column = exp.Column(this=col)
         if value is None:
             if random.choice([True, False]):
                 condition = exp.Is(this=column, expression=exp.Null())
             else:
-                condition = exp.IsNot(this=column, expression=exp.Null())
+                condition = exp.Not(this=exp.Is(this=column, expression=exp.Null()))
         else:
             if isinstance(value, str):
                 literal = exp.Literal.string(value)
@@ -53,6 +55,8 @@ class QueryGenerator:
     def generate_query_for_pivot(self, pivot, table_name):
         conditions = []
         for col, value in pivot.items():
+            if isinstance(value, float) and math.isnan(value):
+                value = None
             condition = self.get_condition(value, col)
 
             conditions.append(condition)
