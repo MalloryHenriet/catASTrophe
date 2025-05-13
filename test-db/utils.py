@@ -57,10 +57,12 @@ def generate_insert(table_name, df):
 
 
 def load_csv(csv_name, header, cols):
-    df = pd.read_csv(csv_name)
-    df_copy = df.copy()
-    df_copy.columns = header
-    return df_copy[cols]
+    df = pd.read_csv(csv_name, na_values=["", "NULL"])
+    df.columns = header
+    for col in ["Height", "Weight"]:
+        if col in df.columns:
+            df[col] = df[col].replace(0, pd.NA)
+    return df[cols]
 
 def update_count_clauses(query, count):
     counts = {clause: 0 for clause in SQL_CLAUSES}
