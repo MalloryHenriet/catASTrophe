@@ -1,23 +1,40 @@
+
 # version: '3.8'
 
 # services:
 #   sqlite3:
-#     image: sqlite3-test-image  # Use the locally built image or a public image
+#     image: theosotr/sqlite3-test  # Use the correct Docker image
 #     container_name: sqlite3-container
-#     volumes:
-#       - ./sqlite_data:/sqlite
-#     networks:
-#       - sqlite_network
 
-# networks:
-#   sqlite_network:
-#     driver: bridge
+
+
+
+
 version: '3.8'
 
 services:
   sqlite3:
-    image: theosotr/sqlite3-test  # Use the correct Docker image
+    image: theosotr/sqlite3-test
     container_name: sqlite3-container
+    working_dir: /home/test/sqlite
+    volumes:
+      - ./shared:/data
+    stdin_open: true
+    tty: true
+
+  # app:
+  #   build:
+  #     context: ./app
+  #   volumes:
+  #     - .:/app
+  #   depends_on:
+  #     - sqlite
+
+
+
+
+
+
     # platform: linux/arm64  # Force Docker to use the ARM architecture
 #     volumes:
 #       - ./sqlite_data:/sqlite  # Mount a local directory to store SQLite data

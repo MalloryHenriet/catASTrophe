@@ -1,0 +1,1 @@
+SELECT * FROM idols_table WHERE weight = '0' AND date_of_birth = '3/20/1998' AND birthplace = 'Busan' AND gender = 'F' AND instagram = 'nan' AND stage_name = 'Suji' AND korean_name = '이수지' AND height = '0' AND korean_stage_name = '수지' AND full_name = 'Lee Suji' AND groupname = 'UNI.T' AND country = 'South Korea'
