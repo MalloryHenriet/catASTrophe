@@ -14,6 +14,7 @@
 # We are going to use the 2 datasets kpop_idols and kpop_ranking for query generation
 
 import random
+import math
 from sqlglot import exp, select
 
 operators = ['=', '!=', '<', '>', 'LIKE']
@@ -54,6 +55,8 @@ class QueryGenerator:
     def generate_query_for_pivot(self, pivot, table_name):
         conditions = []
         for col, value in pivot.items():
+            if isinstance(value, float) and math.isnan(value):
+                value = None
             condition = self.get_condition(value, col)
 
             conditions.append(condition)
