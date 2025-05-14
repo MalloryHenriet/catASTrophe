@@ -16,9 +16,18 @@ def start_docker_compose():
         print("Error starting Docker Compose:")
         print(e.stderr.decode())
         exit(1)
-
 def initialize_database_in_container(version, init_sql_path, db_path='/data/test.db'):
-    print(f"Initializing the database in container using {init_sql_path}...")
+    container_name = "sqlite3-container"
+
+    binary = {
+        "3.26.0": "/usr/bin/sqlite3-3.26.0",
+        "3.39.4": "/usr/bin/sqlite3-3.39.4"
+    }.get(version)
+
+    if not binary:
+        raise ValueError(f"Unsupported version: {version}")
+
+    print(f"Initializing the database using {binary}...")
 
     db_file = os.path.join(os.getcwd(), 'shared', 'test.db')
     if os.path.exists(db_file):
@@ -26,15 +35,13 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
         print("Removed existing test.db")
 
     command = [
-        "docker", "exec", "-i", "sqlite3-container",
-        "/home/test/sqlite/sqlite3", db_path
+        "docker", "exec", "-i", container_name,
+        binary, db_path
     ]
 
     try:
         with open(init_sql_path, 'r', encoding='utf-8') as f:
             sql_script = f.read()
-
-        print("command : ", command)
 
         result = subprocess.run(
             command, input=sql_script, text=True, capture_output=True, check=True
