@@ -21,6 +21,13 @@ from config import NUMERIC_COLS
 
 operators = ['=', '!=', '<', '>', 'LIKE']
 arithmetic = ['+', '-', '*', '/', '%']
+arithmetic_map = {
+    '+': exp.Add,
+    '-': exp.Sub,
+    '*': exp.Mul,
+    '/': exp.Div,
+    '%': exp.Mod
+    }
 
 class QueryGenerator:
     def __init__(self):
@@ -29,8 +36,8 @@ class QueryGenerator:
     def random_numerical_arithmetic(self, expr):
         if random.random() < 0.5:
             op = random.choice(arithmetic)
-            operand = exp.Literal.number(random.randint(1, 5))
-            return exp.Binary(this=exp, expression=operand, op=op)
+            operand = exp.Literal.number(random.randint(1, 1000))
+            return arithmetic_map[op](this=exp, expression=operand, op=op)
         return expr
 
     def get_condition(self, value, col):
@@ -41,7 +48,7 @@ class QueryGenerator:
                 condition = exp.Is(this=column, expression=exp.Null())
             else:
                 condition = exp.Not(this=exp.Is(this=column, expression=exp.Null()))
-        
+     
         else :
             if col in NUMERIC_COLS and isinstance(value, (int, float)):
                 column = self.random_numerical_arithmetic(column)
