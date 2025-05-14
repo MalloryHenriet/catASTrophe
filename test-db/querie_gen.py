@@ -24,7 +24,6 @@ class QueryGenerator:
         pass
 
     def get_condition(self, value, col):
-        print(f"DEBUG: Column={col}, Value={value}, Type={type(value)}")
         column = exp.Column(this=col)
         if value is None:
             if random.choice([True, False]):
@@ -59,6 +58,9 @@ class QueryGenerator:
                 value = None
             conditions.append(self.get_condition(value, col))
 
+        if not conditions:
+            return exp.TRUE
+
         expression = conditions[0]
         for cond in conditions[1:]:
             if random.random() < 0.6:
@@ -74,11 +76,12 @@ class QueryGenerator:
         if value is None:
             new_value = exp.Null()
         elif isinstance(value, str):
-            new_value = exp.Literal.string(value[::-1])  # Reverse string as a basic mutation
+            new_value = exp.Literal.string(value[::-1])  # Reverse string
         elif isinstance(value, (int, float)):
             new_value = exp.Literal.number(str(value + random.randint(-5, 5)))
         else:
             new_value = exp.Literal.string(str(value))
+        
         return exp.EQ(this=exp.Column(this=col), expression=new_value)
     
     def generate_aggregate_query(self, pivot, table_name):
@@ -148,25 +151,20 @@ class QueryGenerator:
         return query
     
     def generate_update(self, pivot, table_name):
-        set_clauses = self.get_random_assignment(pivot)
-        expressions = self.generate_where_clause(pivot)
-        if expressions is None:
-            expressions = exp.TRUE
-        query = exp.Update(
-            this=exp.to_identifier(table_name),
-            expressions=[set_clauses],
-            where=expressions
-        )
+        assignment = self.get_random_assignment(pivot)        
+        where_expr = self.generate_where_clause(pivot)
+        if where_expr is None:
+            where_expr = exp.TRUE  # Redundant now, but safe
+        query = exp.Update().table(table_name).set_(assignment).where(where_expr)
         return query
 
     def generate_delete(self, pivot, table_name):
-        expressions = self.generate_where_clause(pivot)
-        if expressions is None:
-            expressions = exp.TRUE
-        query = exp.Delete(
-            this=exp.to_identifier(table_name),
-            where=expressions
-        )
+        where_expr = self.generate_where_clause(pivot)
+        if where_expr is None:
+            where_expr = exp.TRUE
+
+        print(f"TAble Name: {table_name}")
+        query = exp.delete(table=table_name).where(where_expr)
         return query
 
 
