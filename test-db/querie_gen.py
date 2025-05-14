@@ -51,22 +51,38 @@ class QueryGenerator:
                 pattern = f"%{str(value)}%"
                 condition = exp.Like(this=column, expression=exp.Literal.string(pattern))
         return condition
-
-    def generate_query_for_pivot(self, pivot, table_name):
+    
+    def generate_where_clause(self, pivot):
         conditions = []
         for col, value in pivot.items():
             if isinstance(value, float) and math.isnan(value):
                 value = None
-            condition = self.get_condition(value, col)
+            conditions.append(self.get_condition(value, col))
 
-            conditions.append(condition)
-
-        expressions = conditions[0]
+        expression = conditions[0]
         for cond in conditions[1:]:
             if random.random() < 0.6:
-                expressions = exp.And(this=expressions, expression=cond)
+                expression = exp.And(this=expression, expression=cond)
             else:
-                expressions = exp.Or(this=expressions, expression=cond)
+                expression = exp.Or(this=expression, expression=cond)
+
+        return expression
+
+    def get_random_assignment(self, pivot):
+        col = random.choice(list(pivot.keys()))
+        value = pivot[col]
+        if value is None:
+            new_value = exp.Null()
+        elif isinstance(value, str):
+            new_value = exp.Literal.string(value[::-1])  # Reverse string as a basic mutation
+        elif isinstance(value, (int, float)):
+            new_value = exp.Literal.number(str(value + random.randint(-5, 5)))
+        else:
+            new_value = exp.Literal.string(str(value))
+        return exp.EQ(this=exp.Column(this=col), expression=new_value)
+    
+    def generate_select(self, pivot, table_name):
+        expressions = self.generate_where_clause(pivot)
 
         query = exp.select("*").from_(table_name).where(expressions)
 
@@ -84,37 +100,52 @@ class QueryGenerator:
             having_cond = self.get_condition(random.choice(list(pivot.values())), random.choice(list(pivot.keys())))
             query = query.having(having_cond)
 
-        # ALL THE WEIRD QUERIES
-        if random.random() < 0.01:
+        weirdness = random.random()
+        if weirdness < 0.01:
             query = select("1 = 1 AND 1 = 0").from_(table_name)
-
-        if random.random() < 0.01:
-            # Create syntactically invalid expression
+        elif weirdness < 0.02:
             query = select("COUNT(SELECT * FROM table)")
-
-        if random.random() < 0.01:
-            # Add ambiguous alias
+        elif weirdness < 0.03:
             query = select("name AS age", "age").from_(table_name).order_by("age")
-
-        if random.random() < 0.01:
-            # Test edge cases
+        elif weirdness < 0.04:
             query = select().from_(table_name).select(
-                exp.EQ(
-                    this=exp.Column(this="weight"),
-                    expression=exp.Literal.number("-9223372036854775809")
-                )
+                exp.EQ(this=exp.Column(this="weight"), expression=exp.Literal.number("-9223372036854775809"))
+            )
+        elif weirdness < 0.05:
+            query = select().from_(table_name).select(
+                exp.EQ(this=exp.Column(this="weight"), expression=exp.Literal.number("1E28475"))
             )
 
-        if random.random() < 0.01:
-            # Test exponential cases
-            query = select().from_(table_name).select(
-                exp.EQ(
-                    this=exp.Column(this="weight"),
-                    expression=exp.Literal.number("1E28475")
-                )
-            )
-        
         return query
+    
+    def generate_update(self, pivot, table_name):
+        set_clauses = self.get_random_assignment(pivot)
+        expressions = self.generate_where_clause(pivot)
+        query = exp.Update(
+            this=exp.to_identifier(table_name),
+            expressions=[set_clauses],
+            where=expressions
+        )
+        return query
+
+    def generate_delete(self, pivot, table_name):
+        expressions = self.generate_where_clause(pivot)
+        query = exp.Delete(
+            this=exp.to_identifier(table_name),
+            where=expressions
+        )
+        return query
+
+
+    def generate_query_for_pivot(self, pivot, table_name):
+        choice = random.random()
+        if choice < 0.5:
+            return self.generate_select(pivot, table_name)
+        elif choice < 0.75:
+            return self.generate_update(pivot, table_name)
+        else:
+            return self.generate_delete(pivot, table_name)
+
 
     def generate_query(self):
         # TODO: implement

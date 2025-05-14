@@ -32,7 +32,6 @@ def main(version):
     # PQS Loop
     for _ in range(5):
         pivot, table_name = database_generator.choose_pivot()
-        print(pivot)
 
         query = query_generator.generate_query_for_pivot(pivot, table_name)
         
