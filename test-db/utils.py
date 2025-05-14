@@ -84,6 +84,10 @@ def update_count_clauses(query, count):
             counts['HAVING'] += 1
         elif isinstance(node, exp.Limit):
             counts['LIMIT'] += 1
+        elif isinstance(node, exp.Delete):
+            counts['DELETE'] += 1
+        elif isinstance(node, exp.Update):
+            counts['UPDATE'] += 1
 
     for clause, num in counts.items():
         count[clause].append(num)

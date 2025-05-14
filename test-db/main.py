@@ -68,6 +68,7 @@ def main(versions):
     # Generate one query at a time and run it across all versions
     for _ in range(5):
         pivot, table_name = database_generator.choose_pivot()
+
         print(f"Using pivot: {pivot}")
         query = query_generator.generate_query_for_pivot(pivot, table_name)
 
