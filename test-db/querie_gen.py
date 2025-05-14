@@ -42,28 +42,29 @@ class QueryGenerator:
             else:
                 condition = exp.Not(this=exp.Is(this=column, expression=exp.Null()))
         
-        if col in NUMERIC_COLS and isinstance(value, (int, float)):
-            column = self.random_numerical_arithmetic(column)
+        else :
+            if col in NUMERIC_COLS and isinstance(value, (int, float)):
+                column = self.random_numerical_arithmetic(column)
                 
-        if isinstance(value, str):
-            literal = exp.Literal.string(value)
-        elif isinstance(value, (int, float)):
-            literal = exp.Literal.number(value)
-        else:
-            literal = exp.Literal.string(str(value))
+            if isinstance(value, str):
+                literal = exp.Literal.string(value)
+            elif isinstance(value, (int, float)):
+                literal = exp.Literal.number(value)
+            else:
+                literal = exp.Literal.string(str(value))
 
-        operation = random.choice(operators)
-        if operation == '=':
-            condition = exp.EQ(this=column, expression=literal)
-        elif operation == '!=':
-            condition = exp.NEQ(this=column, expression=literal)
-        elif operation == '<':
-            condition = exp.LT(this=column, expression=literal)
-        elif operation == '>':
-            condition = exp.GT(this=column, expression=literal)
-        elif operation == 'LIKE':
-            pattern = f"%{str(value)}%"
-            condition = exp.Like(this=column, expression=exp.Literal.string(pattern))
+            operation = random.choice(operators)
+            if operation == '=':
+                condition = exp.EQ(this=column, expression=literal)
+            elif operation == '!=':
+                condition = exp.NEQ(this=column, expression=literal)
+            elif operation == '<':
+                condition = exp.LT(this=column, expression=literal)
+            elif operation == '>':
+                condition = exp.GT(this=column, expression=literal)
+            elif operation == 'LIKE':
+                pattern = f"%{str(value)}%"
+                condition = exp.Like(this=column, expression=exp.Literal.string(pattern))
 
         return condition
 
