@@ -121,12 +121,19 @@ class QueryGenerator:
     def generate_update(self, pivot, table_name):
         set_clauses = self.get_random_assignment(pivot)
         expressions = self.generate_where_clause(pivot)
-        query = exp.update().this(table_name).set(set_clauses).where(expressions)
+        query = exp.Update(
+            this=exp.to_identifier(table_name),
+            expressions=[set_clauses],
+            where=expressions
+        )
         return query
 
     def generate_delete(self, pivot, table_name):
         expressions = self.generate_where_clause(pivot)
-        query = exp.delete().from_(table_name).where(expressions)
+        query = exp.Delete(
+            this=exp.to_identifier(table_name),
+            where=expressions
+        )
         return query
 
 
