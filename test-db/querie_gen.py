@@ -150,6 +150,8 @@ class QueryGenerator:
     def generate_update(self, pivot, table_name):
         set_clauses = self.get_random_assignment(pivot)
         expressions = self.generate_where_clause(pivot)
+        if expressions is None:
+            expressions = exp.TRUE
         query = exp.Update(
             this=exp.to_identifier(table_name),
             expressions=[set_clauses],
@@ -159,6 +161,8 @@ class QueryGenerator:
 
     def generate_delete(self, pivot, table_name):
         expressions = self.generate_where_clause(pivot)
+        if expressions is None:
+            expressions = exp.TRUE
         query = exp.Delete(
             this=exp.to_identifier(table_name),
             where=expressions
