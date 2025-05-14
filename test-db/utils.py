@@ -88,6 +88,16 @@ def update_count_clauses(query, count):
             counts['DELETE'] += 1
         elif isinstance(node, exp.Update):
             counts['UPDATE'] += 1
+        elif isinstance(node, exp.Max):
+            counts['MAX'] += 1
+        elif isinstance(node, exp.Min):
+            counts['MIN'] += 1
+        elif isinstance(node, exp.Avg):
+            counts['AVG'] += 1
+        elif isinstance(node, exp.Count):
+            counts['COUNT'] += 1
+        elif isinstance(node, exp.Sum):
+            counts['SUM'] += 1
 
     for clause, num in counts.items():
         count[clause].append(num)
