@@ -139,9 +139,9 @@ class QueryGenerator:
 
     def generate_query_for_pivot(self, pivot, table_name):
         choice = random.random()
-        if choice < 0.75:
+        if choice < 0.5:
             return self.generate_select(pivot, table_name)
-        elif choice < 0.9:
+        elif choice < 0.75:
             return self.generate_update(pivot, table_name)
         else:
             return self.generate_delete(pivot, table_name)
