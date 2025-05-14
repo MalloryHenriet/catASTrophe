@@ -88,10 +88,11 @@ class QueryGenerator:
             return self.generate_select(pivot, table_name)  # Fallback
 
         col = random.choice(numeric_cols)
-        func_name = random.choice(["MAX", "MIN", "AVG", "SUM", "COUNT"])
+        col_expr = exp.Column(this=col)
+        func = random.choice([exp.Max, exp.Min, exp.Sum, exp.Avg, exp.Count])
         
         # Create aggregate expression
-        agg_expr = exp.Anonymous(this=func_name, expressions=[exp.Column(this=col)])
+        agg_expr = func(this=col_expr)
         
         query = exp.select(agg_expr).from_(table_name)
 
@@ -103,9 +104,8 @@ class QueryGenerator:
 
         # Optional HAVING
         if random.random() < 0.3:
-            threshold = random.randint(1, 100)
             query = query.having(
-                exp.GT(this=agg_expr.copy(), expression=exp.Literal.number(threshold))
+                exp.GT(this=agg_expr.copy(), expression=exp.Literal.number(random.randint(1, 100)))
             )
 
         return query
