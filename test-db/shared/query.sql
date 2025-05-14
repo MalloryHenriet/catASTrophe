@@ -1,1 +1,1 @@
-DELETE FROM songs_table WHERE year = 2023
+SELECT * FROM idols_table WHERE full_name < 'Kim Bomin' AND height > 0 OR korean_stage_name <> '보민' ORDER BY korean_stage_name LIMIT 9

@@ -60,6 +60,7 @@ def main(versions, test_flag, runs):
                     recorder.report_bug(query_sql, version, bug_type)
 
             total_queries += 1
+            print("Current iteration: ", total_queries)
 
             # Compare outputs
             v0, v1 = versions
