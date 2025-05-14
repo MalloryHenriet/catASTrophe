@@ -33,16 +33,20 @@ class QueryRunner:
                 "docker", "exec", "-i",
                 self.sqlite_container_name,
                 "bash", "-c",
-                f"{sqlite_binary} {database} < /data/query.sql"
+                #f"{sqlite_binary} {database} < /data/query.sql"
+                #"/home/test/sqlite && ./sqlite",f" {database} < /data/query.sql"
+                "./sqlite3 /data/test.db < /data/query.sql"
             ]
 
+           
             docker_gcov = [
                 "docker", "exec", "-i",
                 self.sqlite_container_name,
                 "bash", "-c",
                 "gcov -r sqlite3-sqlite3.gcda"
             ]
-
+            
+            
             print(f"Executing query on SQLite {self.version}...")
             result = subprocess.run(docker_cmd, capture_output=True, text=True)
             print("====End query==== ")

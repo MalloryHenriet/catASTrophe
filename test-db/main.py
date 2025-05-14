@@ -1,6 +1,7 @@
 
 # Main file
 import argparse
+import time
 
 from docker_utils import start_docker_compose, initialize_database_in_container
 
@@ -26,6 +27,8 @@ def main(versions, test_flag, runs):
     database = database_generator.generate_database()
 
     results = {}
+    total_queries = 0
+    start_time = time.time()
 
     # Generate one query at a time and run it across all versions
     for _ in range(runs):
@@ -56,6 +59,8 @@ def main(versions, test_flag, runs):
                     print("Bug detected!")
                     recorder.report_bug(query_sql, version, bug_type)
 
+            total_queries += 1
+
             # Compare outputs
             v0, v1 = versions
             if results[v0] != results[v1]:
@@ -65,7 +70,11 @@ def main(versions, test_flag, runs):
             else:
                 print(f"✅ Output is consistent across {v0} and {v1}")
 
+    elapsed_time = time.time() - start_time
+    queries_per_minute = (total_queries / elapsed_time) * 60
+
     # Final stats
+    print(f"\nPerformance: {queries_per_minute:.2f} queries/min")
     print(f"\nFrequency per clauses: {get_freq_clauses(sql_clauses_count)}")
     print(f"Average Expression Depth: {sum(expression_depth) / len(expression_depth)}")
     print(f"Query Validity: {sum(query_validity) / len(query_validity)}")

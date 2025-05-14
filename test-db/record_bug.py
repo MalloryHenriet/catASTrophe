@@ -39,4 +39,4 @@ class BugRecorder:
             write_file(path, "README.md", "The SQL engine encounter a logic bug")
 
         # 5.
-        write_file(path, "version.txt", "\n".join(version))
+        write_file(path, "version.txt", version)

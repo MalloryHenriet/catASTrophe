@@ -1,1 +1,1 @@
-SELECT * FROM songs_table WHERE album > 'Flower' OR rank <> 53 AND song_title <> 'X Song (Feat. Dok2)' OR time = 11 GROUP BY album ORDER BY album LIMIT 2
+DELETE FROM songs_table WHERE year = 2023
