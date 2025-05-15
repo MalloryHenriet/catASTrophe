@@ -38,13 +38,11 @@ class BugRecorder:
         
         # 4.
         if bug_type == BUG_TYPES['crash']:
-            write_file(path, "README.md", "The SQL engine crashed on the given query")
+            readme_content = "The SQL engine crashed on the given query" + ("\n--- stderr output ---\n" + stderr_output) if stderr_output else ''
+            write_file(path, "README.md", readme_content)
         elif bug_type == BUG_TYPES['logic']:
-            write_file(path, "README.md", "The SQL engine encounter a logic bug")
+            readme_content = "The SQL engine encounter a logic bug" + ("\n--- stderr output ---\n" + stderr_output) if stderr_output else ''
+            write_file(path, "README.md", readme_content)
 
         # 5.
         write_file(path, "version.txt", version)
-
-        # 6. Save stderr
-        if stderr_output:
-            write_file(path, "stderr.txt", stderr_output)
