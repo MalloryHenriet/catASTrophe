@@ -50,8 +50,7 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
         )
 
         print("Database initialized successfully.")
-        # if result.stdout:
-        #     print("SQLite output:", result.stdout)
+    
 
     except subprocess.CalledProcessError as e:
         print("Failed to initialize database in container:")
