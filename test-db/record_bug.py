@@ -12,7 +12,8 @@
 # 4. README.md: A README file describing the expected results of the database engine vs. its actual one.
 #
 # 5. version.txt: This file records the SQLite3 version in which the bug was found.
-
+import shutil
+import os
 from utils import create_bug_folder, write_file
 from config import BUG_TYPES
 
@@ -20,7 +21,7 @@ class BugRecorder:
     def __init__(self):
         pass
 
-    def report_bug(self, query, version, bug_type):
+    def report_bug(self, query, version, bug_type, stderr_output=""):
         # TODO: implement
         path = create_bug_folder()
 
@@ -30,7 +31,15 @@ class BugRecorder:
         # 2. TO WRITE MANUALLY FOR EACH BUGS
 
         # 3.
-        write_file(path, "test.db", "This is the test db")
+        # write_file(path, "test.db", "This is the test db") 
+        #TODO: copy properly the DB
+        try:
+            shutil.copy(os.path.join(os.getcwd(), 'shared', "test.db"), os.path.join(path, "test.db"))
+            print(f"Copied the test database from {"/shared/test.db"} to {path}/test.db")
+        except Exception as e:
+            print(f"Error copying test.db: {e}")
+            # You may choose to handle this error or raise it depending on your needs.
+
 
         # 4.
         if bug_type == BUG_TYPES['crash']:
@@ -39,4 +48,8 @@ class BugRecorder:
             write_file(path, "README.md", "The SQL engine encounter a logic bug")
 
         # 5.
-        write_file(path, "version.txt", "\n".join(version))
+        write_file(path, "version.txt", version)
+
+        # 6. Save stderr
+        if stderr_output:
+            write_file(path, "stderr.txt", stderr_output)

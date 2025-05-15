@@ -1,6 +1,7 @@
 
 # Main file
 import argparse
+import time
 
 from docker_utils import start_docker_compose, initialize_database_in_container
 
@@ -11,6 +12,19 @@ from database_gen import DatabaseGenerator
 
 from config import VERSIONS, SQL_CLAUSES, BUG_TYPES
 from utils import update_count_clauses, get_freq_clauses, get_expression_depth, get_validity
+
+from config import IGNORABLE_ERRORS
+
+
+
+def is_ignorable_error(stderr_output: str) -> bool:
+    ignorable_errors = [
+        "a GROUP BY clause is required before HAVING",
+        "no such column: nan",
+        "HAVING clause on a non-aggregate query"
+    ]
+    return any(ignorable_error in stderr_output for ignorable_error in ignorable_errors)
+
 
 def main(versions, test_flag, runs):
     sql_clauses_count = {clause: [] for clause in SQL_CLAUSES}
@@ -26,6 +40,9 @@ def main(versions, test_flag, runs):
     database = database_generator.generate_database()
 
     results = {}
+    total_queries = 0
+    start_time = time.time()
+    #execution_times = []
 
     # Generate one query at a time and run it across all versions
     for _ in range(runs):
@@ -46,34 +63,62 @@ def main(versions, test_flag, runs):
             for version in versions:
                 initialize_database_in_container(version, database)
                 runner = QueryRunner(version)
+                #start_time = time.time()
                 bug_type, result = runner.run(query_sql)
+                #end_time = time.time()
+                #execution_times.append(end_time - start_time)
 
                 print(f"--- SQLite {version} Output ---")
-                print(result)
+                #print(result)
                 results[version] = result
 
+                
+
+                
+                # if output_3260 != output_3394:
+                #     return "LOGIC_BUG", (output_3260, output_3394)
+
+                
+
                 if bug_type:
-                    print("Bug detected!")
-                    recorder.report_bug(query_sql, version, bug_type)
+                    if is_ignorable_error(result) :
+                        print("⚠️ Skipping ignorable error GROUP BY before HAVING or column:nan.")
+                        continue
+                    else:
+                        print("Bug detected!")
+                        print("HERE 1")
+                        recorder.report_bug(query_sql, version, bug_type, stderr_output=result)
                 else:
                     partitioning = runner.run_partitioning(query, result, database)
                     if not partitioning:
-                        recorder.report_bug(query_sql, version, BUG_TYPES['crash'])
+                        print("HERE 2")
+                        #recorder.report_bug(query_sql, version, BUG_TYPES['crash'])
+
+            total_queries += 1
+            print("Current iteration: ", total_queries)
+
 
             # Compare outputs
             v0, v1 = versions
             if results[v0] != results[v1]:
-                recorder.report_bug(query_sql, versions, BUG_TYPES['logic'])
+                print("HERE 3")
+                recorder.report_bug(query_sql, v0+v1, BUG_TYPES['logic'], stderr_output=results[v0])
                 print(f"\n❗ Output mismatch between {v0} and {v1}")
                 print(f"{v0}:\n{results[v0]}")
                 print(f"{v1}:\n{results[v1]}")
             else:
                 print(f"✅ Output is consistent across {v0} and {v1}")
 
+    elapsed_time = time.time() - start_time
+    queries_per_minute = (total_queries / elapsed_time) * 60
+
     # Final stats
+    print(f"\nPerformance: {queries_per_minute:.2f} queries/min")
     print(f"\nFrequency per clauses: {get_freq_clauses(sql_clauses_count)}")
     print(f"Average Expression Depth: {sum(expression_depth) / len(expression_depth)}")
     print(f"Query Validity: {sum(query_validity) / len(query_validity)}")
+    #avg_time = sum(execution_times) / len(execution_times) if execution_times else 0
+    #print(f"✅ Average Execution Time per Query: {avg_time:.4f} seconds")
 
 
 if __name__ == "__main__":

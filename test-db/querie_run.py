@@ -5,10 +5,15 @@ import os
 from config import BUG_TYPES
 from utils import generate_predicate, extract_predicate_from_ast
 
+
+
 class QueryRunner:
     def __init__(self, version, sqlite_container_name='sqlite3-container'):
         self.version = version
         self.sqlite_container_name = sqlite_container_name
+    
+    
+
 
     def run(self, query, database='/data/test.db'):
         try:
@@ -35,24 +40,33 @@ class QueryRunner:
                 self.sqlite_container_name,
                 "bash", "-c",
                 f"{sqlite_binary} {database} < /data/query.sql"
+                #"/home/test/sqlite && ./sqlite",f" {database} < /data/query.sql"
+                #"./sqlite3 /data/test.db < /data/query.sql"
             ]
 
-            docker_gcov = [
-                "docker", "exec", "-i",
-                self.sqlite_container_name,
-                "bash", "-c",
-                "gcov -r sqlite3-sqlite3.gcda"
-            ]
-
+           
+            # docker_gcov = [
+            #     "docker", "exec", "-i",
+            #     self.sqlite_container_name,
+            #     "bash", "-c",
+            #     "gcov -r sqlite3-sqlite3.gcda"
+            # ]
+            
+            
             print(f"Executing query on SQLite {self.version}...")
             result = subprocess.run(docker_cmd, capture_output=True, text=True)
             print("====End query==== ")
             print("result: ", result.stdout)
             print("====End result==== ")
 
-            gcov_result = subprocess.run(docker_gcov, capture_output=True, text=True)
-            print("gcov_result: ", gcov_result.stdout)
-            print("gcov_result_err: ", gcov_result.stderr)
+            # gcov_result = subprocess.run(docker_gcov, capture_output=True, text=True)
+            # print("gcov_result: ", gcov_result.stdout)
+            # print("gcov_result_err: ", gcov_result.stderr)
+
+
+
+            
+
 
 
             
@@ -98,13 +112,3 @@ if __name__ == "__main__":
     # Ensure the container is running
     query_runner.start_container()
 
-    # Example query
-    # query = """
-    #     CREATE TABLE IF NOT EXISTS t0 ( c0 INT );
-    #     INSERT INTO t0 ( c0 ) VALUES (1);
-    #     SELECT * FROM t0 WHERE 1 = 1;
-    # """
-
-    # # Run the query on version 3.39.4 container (or another version if needed)
-    # result = query_runner.run(query, version="3.39.4")
-    # print("Query execution result:", result)
