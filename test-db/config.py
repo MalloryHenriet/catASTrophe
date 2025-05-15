@@ -5,7 +5,7 @@ SQL_CLAUSES = ["SELECT", "FROM", "JOIN", "WHERE", "GROUP BY", "ORDER BY", "LIMIT
 VERSIONS = ["3.26.0", "3.39.4"]
 
 
-BUG_TYPES = ["CRASH", "LOGIC"]
+BUG_TYPES = {'crash': "CRASH", 'logic': "LOGIC"}
 
 TABLES_HEADER = {
     "kpop_idols": ["stage_name", "full_name", "korean_name", "korean_stage_name", "date_of_birth", "groupname", "country", "height", "weight", "birthplace", "gender", "instagram"],

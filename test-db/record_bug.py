@@ -33,9 +33,9 @@ class BugRecorder:
         write_file(path, "test.db", "This is the test db")
 
         # 4.
-        if bug_type == BUG_TYPES[0]:
+        if bug_type == BUG_TYPES['crash']:
             write_file(path, "README.md", "The SQL engine crashed on the given query")
-        elif bug_type == BUG_TYPES[1]:
+        elif bug_type == BUG_TYPES['logic']:
             write_file(path, "README.md", "The SQL engine encounter a logic bug")
 
         # 5.
