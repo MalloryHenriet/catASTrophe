@@ -63,7 +63,7 @@ def main(versions, test_flag, runs):
             # Compare outputs
             v0, v1 = versions
             if results[v0] != results[v1]:
-                recorder.report_bug(query_sql, versions, BUG_TYPES['crash'])
+                recorder.report_bug(query_sql, versions, BUG_TYPES['logic'])
                 print(f"\n❗ Output mismatch between {v0} and {v1}")
                 print(f"{v0}:\n{results[v0]}")
                 print(f"{v1}:\n{results[v1]}")
