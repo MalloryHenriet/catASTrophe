@@ -1,1 +1,0 @@
-The SQL engine encounter a logic bug
