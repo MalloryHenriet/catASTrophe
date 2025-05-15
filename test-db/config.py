@@ -2,7 +2,6 @@ SQL_CLAUSES = ["SELECT", "FROM", "JOIN", "WHERE", "GROUP BY", "ORDER BY", "LIMIT
 
 VERSIONS = ["3.26.0", "3.39.4"]
 
-
 BUG_TYPES = {'crash': "CRASH", 'logic': "LOGIC"}
 
 TABLES_HEADER = {

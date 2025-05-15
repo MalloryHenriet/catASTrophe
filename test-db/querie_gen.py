@@ -122,23 +122,6 @@ class QueryGenerator:
         if random.random() < 0.3:
             having_cond = self.get_condition(random.choice(list(pivot.values())), random.choice(list(pivot.keys())))
             query = query.having(having_cond)
-
-        # weirdness = random.random()
-        # if weirdness < 0.01:
-        #     query = select("1 = 1 AND 1 = 0").from_(table_name)
-        # elif weirdness < 0.02:
-        #     query = select("COUNT(SELECT * FROM table)")
-        # elif weirdness < 0.03:
-        #     query = select("name AS age", "age").from_(table_name).order_by("age")
-        # elif weirdness < 0.04:
-        #     query = select().from_(table_name).select(
-        #         exp.EQ(this=exp.Column(this="weight"), expression=exp.Literal.number("-9223372036854775809"))
-        #     )
-        # elif weirdness < 0.05:
-        #     query = select().from_(table_name).select(
-        #         exp.EQ(this=exp.Column(this="weight"), expression=exp.Literal.number("1E28475"))
-        #     )
-
         return query
     
     def generate_update(self, pivot, table_name):

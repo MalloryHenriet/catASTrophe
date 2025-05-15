@@ -45,7 +45,7 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
         with open(init_sql_path, 'r', encoding='utf-8') as f:
             sql_script = f.read()
 
-        result = subprocess.run(
+        subprocess.run(
             command, input=sql_script, text=True, capture_output=True, check=True
         )
 
