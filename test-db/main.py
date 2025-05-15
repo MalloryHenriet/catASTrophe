@@ -85,7 +85,7 @@ def main(versions, test_flag, runs):
                 print(f"--- Output is consistent across {v0} and {v1} ---")
 
     elapsed_time = time.time() - start_time
-    queries_per_minute = (total_queries / elapsed_time) * 60
+    queries_per_minute = ((total_queries / elapsed_time) * 60)*2 #*2 for the number of versions the query was executed
 
     # Final stats
     print(f"\nPerformance: {queries_per_minute:.2f} queries/min")
