@@ -1,0 +1,1 @@
+SELECT COUNT(weight) FROM idols_table HAVING COUNT(weight) > 85

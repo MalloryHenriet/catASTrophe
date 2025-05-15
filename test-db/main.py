@@ -86,11 +86,13 @@ def main(versions, test_flag, runs):
                         continue
                     else:
                         print("Bug detected!")
+                        print("HERE 1")
                         recorder.report_bug(query_sql, version, bug_type, stderr_output=result)
                 else:
                     partitioning = runner.run_partitioning(query, result, database)
                     if not partitioning:
-                        recorder.report_bug(query_sql, version, BUG_TYPES['crash'])
+                        print("HERE 2")
+                        #recorder.report_bug(query_sql, version, BUG_TYPES['crash'])
 
             total_queries += 1
             print("Current iteration: ", total_queries)
@@ -99,7 +101,8 @@ def main(versions, test_flag, runs):
             # Compare outputs
             v0, v1 = versions
             if results[v0] != results[v1]:
-                recorder.report_bug(query_sql, versions, BUG_TYPES['logic'])
+                print("HERE 3")
+                recorder.report_bug(query_sql, v0+v1, BUG_TYPES['logic'], stderr_output=results[v0])
                 print(f"\n❗ Output mismatch between {v0} and {v1}")
                 print(f"{v0}:\n{results[v0]}")
                 print(f"{v1}:\n{results[v1]}")
