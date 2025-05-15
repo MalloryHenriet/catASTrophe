@@ -36,8 +36,8 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
 
     command = [
         "docker", "exec", "-i", container_name,
-        #binary,
-        "/home/test/sqlite/sqlite3",
+        binary,
+        #"/home/test/sqlite/sqlite3",
         db_path
     ]
 
@@ -50,8 +50,8 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
         )
 
         print("Database initialized successfully.")
-        if result.stdout:
-            print("SQLite output:", result.stdout)
+        # if result.stdout:
+        #     print("SQLite output:", result.stdout)
 
     except subprocess.CalledProcessError as e:
         print("Failed to initialize database in container:")

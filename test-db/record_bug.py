@@ -21,7 +21,7 @@ class BugRecorder:
     def __init__(self):
         pass
 
-    def report_bug(self, query, version, bug_type):
+    def report_bug(self, query, version, bug_type, stderr_output=""):
         # TODO: implement
         path = create_bug_folder()
 
@@ -49,3 +49,7 @@ class BugRecorder:
 
         # 5.
         write_file(path, "version.txt", version)
+
+        # 6. Save stderr
+        if stderr_output:
+            write_file(path, "stderr.txt", stderr_output)

@@ -18,3 +18,8 @@ TABLES_HEADER_WITH_TYPE = {
 }
 
 NUMERIC_COLS = ["height", "weight", "year", "rank", "time"]
+
+IGNORABLE_ERRORS = [
+    "a GROUP BY clause is required before HAVING",
+    # Add more known, ignorable SQLite errors here
+]

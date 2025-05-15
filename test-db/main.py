@@ -13,6 +13,19 @@ from database_gen import DatabaseGenerator
 from config import VERSIONS, SQL_CLAUSES
 from utils import update_count_clauses, get_freq_clauses, get_expression_depth, get_validity
 
+from config import IGNORABLE_ERRORS
+
+
+
+def is_ignorable_error(stderr_output: str) -> bool:
+    ignorable_errors = [
+        "a GROUP BY clause is required before HAVING",
+        "no such column: nan",
+        "HAVING clause on a non-aggregate query"
+    ]
+    return any(ignorable_error in stderr_output for ignorable_error in ignorable_errors)
+
+
 def main(versions, test_flag, runs):
     sql_clauses_count = {clause: [] for clause in SQL_CLAUSES}
     expression_depth = []
@@ -29,6 +42,7 @@ def main(versions, test_flag, runs):
     results = {}
     total_queries = 0
     start_time = time.time()
+    #execution_times = []
 
     # Generate one query at a time and run it across all versions
     for _ in range(runs):
@@ -49,15 +63,30 @@ def main(versions, test_flag, runs):
             for version in versions:
                 initialize_database_in_container(version, database)
                 runner = QueryRunner(version)
+                #start_time = time.time()
                 bug_type, result = runner.run(query_sql)
+                #end_time = time.time()
+                #execution_times.append(end_time - start_time)
 
                 print(f"--- SQLite {version} Output ---")
-                print(result)
+                #print(result)
                 results[version] = result
 
+                
+
+                
+                # if output_3260 != output_3394:
+                #     return "LOGIC_BUG", (output_3260, output_3394)
+
+                
+
                 if bug_type:
-                    print("Bug detected!")
-                    recorder.report_bug(query_sql, version, bug_type)
+                    if is_ignorable_error(result) :
+                        print("⚠️ Skipping ignorable error GROUP BY before HAVING or column:nan.")
+                        continue
+                    else:
+                        print("Bug detected!")
+                        recorder.report_bug(query_sql, version, bug_type, stderr_output=result)
 
             total_queries += 1
             print("Current iteration: ", total_queries)
@@ -79,6 +108,8 @@ def main(versions, test_flag, runs):
     print(f"\nFrequency per clauses: {get_freq_clauses(sql_clauses_count)}")
     print(f"Average Expression Depth: {sum(expression_depth) / len(expression_depth)}")
     print(f"Query Validity: {sum(query_validity) / len(query_validity)}")
+    #avg_time = sum(execution_times) / len(execution_times) if execution_times else 0
+    #print(f"✅ Average Execution Time per Query: {avg_time:.4f} seconds")
 
 
 if __name__ == "__main__":
