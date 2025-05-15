@@ -29,6 +29,16 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
 
     print(f"Initializing the database using {binary}...")
 
+    try:
+        subprocess.run(
+            ["docker", "exec", container_name, "rm", "-f", db_path],
+            check=True
+        )
+        print("Removed existing test.db in container.")
+    except subprocess.CalledProcessError as e:
+        print("⚠️ Could not remove existing test.db. Might not exist yet.")
+
+
     db_file = os.path.join(os.getcwd(), 'shared', 'test.db')
     if os.path.exists(db_file):
         os.remove(db_file)
