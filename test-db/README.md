@@ -24,15 +24,17 @@ pip install -r requirements.txt
 # User Guide
 Description of the command lines
 
-To run the script type the following command
+**We have not been able to generate a Dockerfile to run our tool**
+
+To run the tool, type the following command
 ```
-python3 main.py
+python main.py
 ```
 
 ### Arguments
-One can add argument like ``-v`` or ``--version`` with one of the following values
-```
-/usr/bin/sqlite3-3.26.0
-/usr/bin/sqlite3-3.39.4
-```
-It will only launch the tester with the selected SQL engine version, otherwise it will test both by default.
+#### Number of run
+``-r`` or ``--runs`` with a numerical value.
+It will launch the fuzzer for this number of iterations. Default is 100.
+#### Versions
+``-v`` or ``--versions`` with an SQL engine version
+It will launch the fuzzer on the specified versions.
