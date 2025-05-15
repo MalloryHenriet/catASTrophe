@@ -32,12 +32,10 @@ class BugRecorder:
         # 3.
         try:
             shutil.copy(os.path.join(os.getcwd(), 'shared', "test.db"), os.path.join(path, "test.db"))
-            print(f"Copied the test database from {"/shared/test.db"} to {path}/test.db")
+            print(f"Copied the test database from /shared/test.db to {path}/test.db")
         except Exception as e:
             print(f"Error copying test.db: {e}")
-            
-
-
+        
         # 4.
         if bug_type == BUG_TYPES['crash']:
             write_file(path, "README.md", "The SQL engine crashed on the given query")
