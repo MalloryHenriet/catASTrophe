@@ -22,7 +22,6 @@ class BugRecorder:
         pass
 
     def report_bug(self, query, version, bug_type, stderr_output=""):
-        # TODO: implement
         path = create_bug_folder()
 
         # 1.
@@ -31,25 +30,19 @@ class BugRecorder:
         # 2. TO WRITE MANUALLY FOR EACH BUGS
 
         # 3.
-        # write_file(path, "test.db", "This is the test db") 
-        #TODO: copy properly the DB
         try:
             shutil.copy(os.path.join(os.getcwd(), 'shared', "test.db"), os.path.join(path, "test.db"))
-            print(f"Copied the test database from {"/shared/test.db"} to {path}/test.db")
+            print(f"Copied the test database from /shared/test.db to {path}/test.db")
         except Exception as e:
             print(f"Error copying test.db: {e}")
-            # You may choose to handle this error or raise it depending on your needs.
-
-
+        
         # 4.
         if bug_type == BUG_TYPES['crash']:
-            write_file(path, "README.md", "The SQL engine crashed on the given query")
+            readme_content = "The SQL engine crashed on the given query" + ("\n--- stderr output ---\n" + stderr_output) if stderr_output else ''
+            write_file(path, "README.md", readme_content)
         elif bug_type == BUG_TYPES['logic']:
-            write_file(path, "README.md", "The SQL engine encounter a logic bug")
+            readme_content = "The SQL engine encounter a logic bug" + ("\n--- stderr output ---\n" + stderr_output) if stderr_output else ''
+            write_file(path, "README.md", readme_content)
 
         # 5.
         write_file(path, "version.txt", version)
-
-        # 6. Save stderr
-        if stderr_output:
-            write_file(path, "stderr.txt", stderr_output)
