@@ -10,7 +10,7 @@ from record_bug import BugRecorder
 from querie_run import QueryRunner
 from database_gen import DatabaseGenerator
 
-from config import VERSIONS, SQL_CLAUSES
+from config import VERSIONS, SQL_CLAUSES, BUG_TYPES
 from utils import update_count_clauses, get_freq_clauses, get_expression_depth, get_validity
 
 from config import IGNORABLE_ERRORS
@@ -87,13 +87,19 @@ def main(versions, test_flag, runs):
                     else:
                         print("Bug detected!")
                         recorder.report_bug(query_sql, version, bug_type, stderr_output=result)
+                else:
+                    partitioning = runner.run_partitioning(query, result, database)
+                    if not partitioning:
+                        recorder.report_bug(query_sql, version, BUG_TYPES['crash'])
 
             total_queries += 1
             print("Current iteration: ", total_queries)
 
+
             # Compare outputs
             v0, v1 = versions
             if results[v0] != results[v1]:
+                recorder.report_bug(query_sql, versions, BUG_TYPES['logic'])
                 print(f"\n❗ Output mismatch between {v0} and {v1}")
                 print(f"{v0}:\n{results[v0]}")
                 print(f"{v1}:\n{results[v1]}")

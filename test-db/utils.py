@@ -7,7 +7,7 @@ import numpy as np
 from sqlglot import exp
 from sqlglot.expressions import Expression
 
-from config import SQL_CLAUSES
+from config import SQL_CLAUSES, NUMERIC_COLS
 
 def create_bug_folder():
     folder_name = "bug_" + uuid.uuid4().hex
@@ -115,3 +115,17 @@ def get_expression_depth(query):
 def get_validity(query):
     is_valid = 1
     return 1 if is_valid else 0
+
+def generate_predicate(query_ast):
+    columns = query_ast.find_all(exp.Column)
+    for col in columns:
+        column_name = col.name
+        if any(word in column_name.lower() for word in NUMERIC_COLS):
+            return f"{column_name} > 10"
+    return None
+
+def extract_predicate_from_ast(query_ast):
+    where = query_ast.find(exp.Where)
+    if where and where.this:
+        return where.this.sql()
+    return None

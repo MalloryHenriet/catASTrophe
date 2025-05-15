@@ -3,6 +3,7 @@ import time
 import os
 
 from config import BUG_TYPES
+from utils import generate_predicate, extract_predicate_from_ast
 
 
 
@@ -70,16 +71,39 @@ class QueryRunner:
 
             
             if result.returncode != 0:
-                return "CRASH", result.stderr
+                return BUG_TYPES['crash'], result.stderr
 
-            return "LOGIC_BUG" if self.pivot_missing(result.stdout, query) else None, result.stdout
+            return BUG_TYPES['logic'] if self.pivot_missing(result.stdout, query) else None, result.stdout
 
         except Exception as e:
-            return "CRASH", str(e)
+            return BUG_TYPES['crash'], str(e)
     
     
     def pivot_missing(self, result_str, pivot):
         return  pivot in result_str
+    
+    def run_partitioning(self, query, original_result, database='/data/test.db'):
+        predicate = extract_predicate_from_ast(query) or generate_predicate(query)
+        if predicate == None:
+            return True
+        
+        subquery_sql = f"({query.sql()})"
+
+        true_query = f"SELECT * FROM {subquery_sql} AS sub WHERE {predicate}"
+        false_query = f"SELECT * FROM {subquery_sql} AS sub WHERE NOT ({predicate})"
+        null_query = f"SELECT * FROM {subquery_sql} AS sub WHERE {predicate} IS NULL"
+
+        print("Query Partitioning")
+        print(true_query)
+        print(false_query)
+        print(null_query)
+
+        true_result = self.run(true_query, database=database)[1]
+        false_result = self.run(false_query, database=database)[1]
+        null_result = self.run(null_query, database=database)[1]        
+
+        combined_result = true_result + false_result + null_result
+        return sorted(combined_result) == sorted(original_result)
     
 # Example usage:
 if __name__ == "__main__":
