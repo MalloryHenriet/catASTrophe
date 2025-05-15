@@ -11,20 +11,7 @@ from querie_run import QueryRunner
 from database_gen import DatabaseGenerator
 
 from config import VERSIONS, SQL_CLAUSES, BUG_TYPES
-from utils import update_count_clauses, get_freq_clauses, get_expression_depth, get_validity
-
-from config import IGNORABLE_ERRORS
-
-
-
-def is_ignorable_error(stderr_output: str) -> bool:
-    ignorable_errors = [
-        "a GROUP BY clause is required before HAVING",
-        "no such column: nan",
-        "HAVING clause on a non-aggregate query"
-    ]
-    return any(ignorable_error in stderr_output for ignorable_error in ignorable_errors)
-
+from utils import update_count_clauses, get_freq_clauses, get_expression_depth, get_validity, is_ignorable_error
 
 def main(versions, test_flag, runs):
     sql_clauses_count = {clause: [] for clause in SQL_CLAUSES}

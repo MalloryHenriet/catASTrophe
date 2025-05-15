@@ -1,7 +1,5 @@
 SQL_CLAUSES = ["SELECT", "FROM", "JOIN", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", "HAVING", "UPDATE", "DELETE", "MAX", "MIN", "SUM", "COUNT", "AVG"]
-#TODO: check that all clauses apply to our versions of SQLite
 
-# VERSIONS = ["/usr/bin/sqlite3-3.26.0", "/usr/bin/sqlite3-3.39.4"]
 VERSIONS = ["3.26.0", "3.39.4"]
 
 
@@ -18,8 +16,3 @@ TABLES_HEADER_WITH_TYPE = {
 }
 
 NUMERIC_COLS = ["height", "weight", "year", "rank", "time"]
-
-IGNORABLE_ERRORS = [
-    "a GROUP BY clause is required before HAVING",
-    # Add more known, ignorable SQLite errors here
-]
