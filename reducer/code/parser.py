@@ -23,3 +23,9 @@ class SQLParser:
 
 if __name__ == "__main__":
     parser = SQLParser()
+    sql = "SELECT a, b FROM t WHERE a > 5 AND b < 3 ORDER BY a"
+    ast = parser.parse(sql)
+
+    if ast:
+        print("Original SQL:", parser.to_sql(ast))
+        print("AST:", ast)
