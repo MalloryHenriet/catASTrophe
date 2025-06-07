@@ -10,9 +10,11 @@ def prepare_workspace(query_path):
     dst = os.path.join(base_dir, "queries", query_id)
 
     if not os.path.exists(src):
-        raise FileNotFoundError(f"Source path not found: {src}")
+        raise FileNotFounxdError(f"Source path not found: {src}")
 
     if os.path.exists(dst):
         shutil.rmtree(dst)
 
     shutil.copytree(src, dst)
+
+   # python reducer.py --query queries-to-minimze/query2 --test test_script.sh    
