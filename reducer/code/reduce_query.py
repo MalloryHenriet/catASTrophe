@@ -4,7 +4,7 @@ from code.delta_debugging import delta_debugging
 
 def reduce_query(query_path, test_script, output_path):
     with open(f"{query_path}/original_test.sql", "r") as original_query:
-        query_string = original_query.readlines()
+        query_string = original_query.read()
 
     # Parse the query to an AST
     parser = SQLParser()
