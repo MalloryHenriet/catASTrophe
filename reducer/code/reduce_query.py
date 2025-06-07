@@ -10,8 +10,6 @@ def reduce_query(query_path, test_script, output_path):
     parser = SQLParser()
     ast_list = parser.parse(query_string)
 
-    print(ast_list)
-
     if not ast_list:
         print("No valid statement to reduce")
         return query_string
@@ -24,7 +22,7 @@ def reduce_query(query_path, test_script, output_path):
         return execute_query(query_string, test_script, output_path)
 
     # Update AST with delta debugging technique
-    ast = delta_debugging(ast, validator)
+    ast_list = delta_debugging(ast_list, validator)
 
     # Translate the AST to SQL string
     minimized = parser.to_sql(ast_list)
