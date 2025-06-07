@@ -3,8 +3,8 @@ from code.executor import execute_query
 from code.delta_debugging import delta_debugging
 
 def reduce_query(query_path, test_script, output_path):
-    with open(query_path, "r") as original_query:
-        query_string = original_query.read()
+    with open(f"{query_path}/original_test.sql", "r") as original_query:
+        query_string = original_query.readlines()
 
     # Parse the query to an AST
     parser = SQLParser()
@@ -28,5 +28,7 @@ def reduce_query(query_path, test_script, output_path):
 
     if minimized is None:
         return query_string
+    
+    print(f"Minimzed Query : {minimized}")
 
     return 0
