@@ -4,13 +4,16 @@ from code.delta_debugging import delta_debugging
 
 def reduce_query(query_path, test_script, output_path):
     with open(f"{query_path}/original_test.sql", "r") as original_query:
-        query_string = original_query.read()
+        query_string = original_query.readlines()
 
     # Parse the query to an AST
     parser = SQLParser()
-    ast = parser.parse(query_string)
+    ast_list = parser.parse(query_string)
 
-    if ast is None:
+    print(ast_list)
+
+    if not ast_list:
+        print("No valid statement to reduce")
         return query_string
     
     # Validator function
@@ -24,7 +27,7 @@ def reduce_query(query_path, test_script, output_path):
     ast = delta_debugging(ast, validator)
 
     # Translate the AST to SQL string
-    minimized = parser.to_sql(ast)
+    minimized = parser.to_sql(ast_list)
 
     if minimized is None:
         return query_string
