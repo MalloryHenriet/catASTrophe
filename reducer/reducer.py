@@ -18,5 +18,6 @@ if __name__ == "__main__":
     # Get the query_id, copy the content of queries-to-minimze/query_id to queries/query_id
     query_id = args.query.strip("/").split("/")[-1]
     prepare_workspace(query_id)
-    
-    reduce_query(args.query, args.test)
+
+    output_path = f"queries/{query_id}/reduced_test.sql"
+    reduce_query(args.query, args.test, output_path)
