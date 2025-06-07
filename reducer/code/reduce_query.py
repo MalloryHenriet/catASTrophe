@@ -30,6 +30,6 @@ def reduce_query(query_path, test_script, output_path):
     if minimized is None:
         return query_string
     
-    print(f"Minimzed Query : {minimized}")
+    #print(f"Minimzed Query : {minimized}")
 
     return 0
