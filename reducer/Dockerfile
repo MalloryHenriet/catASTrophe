@@ -43,6 +43,8 @@ COPY code/ code/
 # Make reducer.py executable and link it
 RUN chmod +x reducer.py && ln -s /reducer/reducer.py /usr/bin/reducer
 
+RUN ln -s /reducer/reducer.py /reducer/reducer
+
 # Optionally switch back to original user (uncomment if you know the user)
 # USER sqlite
 
