@@ -1,5 +1,4 @@
 import random
-import pandas as pd
 
 from utils import create_table, load_csv, generate_insert
 from config import TABLES_HEADER, TABLES_HEADER_WITH_TYPE

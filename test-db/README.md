@@ -1,12 +1,6 @@
 # catASTrophe
 Automated Bug Detection in the Database Engines SQLite3.26.0
 
-# Requirements
-To proceed with the scripts, please make sure you installed all the following requirements by typing this command
-```
-pip install -r requirements.txt
-```
-
 # Project
 
 **Objectives**:
@@ -14,25 +8,33 @@ pip install -r requirements.txt
 1. Evaluates the reliability of SQLite3.26.0 by detecting crashes and logic bugs. 
 2. Build our own SQL generator to produce intersting queries i.e. likely to trigger bugs (crashes OR incorrect results)
 
-**Evaluation**:
 
-1. Bug-finding capability
-2. Characteristics of the generated SQL queries
-3. Code Coverage
-4. Performance
 
 # User Guide
 Description of the command lines
 
-To run the script type the following command
+**Since we are using docker compose up and docker exec [...] our code is not runnable with docker run using a DockerFile. We therefore provide the following commands to properly run our code.**
+
+
+## Requirements
+To proceed with the scripts, please make sure you installed all the following requirements by typing this command
 ```
-python3 main.py
+pip install -r requirements.txt
 ```
 
-### Arguments
-One can add argument like ``-v`` or ``--version`` with one of the following values
+## Run the Tool
+To run the tool, type the following command
 ```
-/usr/bin/sqlite3-3.26.0
-/usr/bin/sqlite3-3.39.4
+python main.py
 ```
-It will only launch the tester with the selected SQL engine version, otherwise it will test both by default.
+
+## Arguments
+#### Number of runs
+``-r`` or ``--runs`` with a numerical value.
+It will launch the fuzzer for this number of iterations. Default is 100.
+Example run:
+```
+python main.py -r 100
+```
+#### Gcov
+Add the flag ``--gcov`` to run the code with gcov enabled.

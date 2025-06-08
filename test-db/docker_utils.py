@@ -29,6 +29,16 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
 
     print(f"Initializing the database using {binary}...")
 
+    try:
+        subprocess.run(
+            ["docker", "exec", container_name, "rm", "-f", db_path],
+            check=True
+        )
+        print("Removed existing test.db in container.")
+    except subprocess.CalledProcessError as e:
+        print("⚠️ Could not remove existing test.db. Might not exist yet.")
+
+
     db_file = os.path.join(os.getcwd(), 'shared', 'test.db')
     if os.path.exists(db_file):
         os.remove(db_file)
@@ -45,13 +55,12 @@ def initialize_database_in_container(version, init_sql_path, db_path='/data/test
         with open(init_sql_path, 'r', encoding='utf-8') as f:
             sql_script = f.read()
 
-        result = subprocess.run(
+        subprocess.run(
             command, input=sql_script, text=True, capture_output=True, check=True
         )
 
         print("Database initialized successfully.")
-        # if result.stdout:
-        #     print("SQLite output:", result.stdout)
+    
 
     except subprocess.CalledProcessError as e:
         print("Failed to initialize database in container:")

@@ -10,25 +10,3 @@ services:
       - ./shared:/data
     stdin_open: true
     tty: true
-
-
-
-# version: '3'
-# services:
-#   sqlite3-3.26.0:
-#     image: theosotr/sqlite3-test:3.26.0
-#     container_name: sqlite3-3.26.0
-#     working_dir: /home/test/sqlite
-#     volumes:
-#       - ./shared:/data
-#     stdin_open: true
-#     tty: true
-
-#   sqlite3-3.39.4:
-#     image: theosotr/sqlite3-test:3.39.4
-#     container_name: sqlite3-3.39.4
-#     working_dir: /home/test/sqlite
-#     volumes:
-#       - ./shared:/data
-#     stdin_open: true
-#     tty: true

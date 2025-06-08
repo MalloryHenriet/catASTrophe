@@ -1,4 +1,3 @@
-
 FROM python:3.10-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -10,9 +9,12 @@ COPY . /app
 
 RUN pip install -r requirements.txt
 
-RUN chmod +x /app/main.py && ln -s /app/main.py /usr/bin/test-db
+# Create /usr/bin/test-db to point to main.py using Python
+RUN echo '#!/bin/sh\nexec python /app/main.py "$@"' > /usr/bin/test-db \
+    && chmod +x /usr/bin/test-db
 
-ENTRYPOINT ["test-db"]
+ENTRYPOINT ["/usr/bin/test-db"]
+
 
 #build image with: docker build -t fuzzer-db .
 #then run : docker run --rm -v $(pwd)/shared:/data --network host fuzzer-db -r 100

@@ -129,3 +129,11 @@ def extract_predicate_from_ast(query_ast):
     if where and where.this:
         return where.this.sql()
     return None
+
+def is_ignorable_error(stderr_output: str) -> bool:
+    ignorable_errors = [
+        "a GROUP BY clause is required before HAVING",
+        "no such column: nan",
+        "HAVING clause on a non-aggregate query"
+    ]
+    return any(ignorable_error in stderr_output for ignorable_error in ignorable_errors)
