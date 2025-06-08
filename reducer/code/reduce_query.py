@@ -8,9 +8,10 @@ def reduce_query(query_path, test_script, output_path):
 
     # Parse the query to an AST
     parser = SQLParser()
-    ast_list = parser.parse(query_string)
+    token_tree = parser.parse(query_string)
+    token_tree_size = sum(len(parser.flatten_tokens(tree)) for tree in token_tree)
 
-    if not ast_list:
+    if not token_tree:
         print("No valid statement to reduce")
         return query_string
     
@@ -22,11 +23,12 @@ def reduce_query(query_path, test_script, output_path):
         return execute_query(query_string, test_script, output_path)
 
     # Update AST with delta debugging technique
-    ast_list = delta_debugging(ast_list, validator)
+    token_tree = delta_debugging(token_tree, validator)
 
-    minimized = parser.to_sql(ast_list)
+    minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in token_tree)
+    minimized = parser.to_sql(token_tree)
 
     if minimized is None:
-        return query_string
+        return query_string, token_tree_size, minimzed_token_size
     
-    return 0
+    return minimized, token_tree_size, minimzed_token_size
