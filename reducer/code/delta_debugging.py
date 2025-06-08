@@ -19,7 +19,7 @@ def delta_debugging(ast_list, validator):
             
             trial = ast_list[:i * chunk_len] + ast_list[(i + 1) * chunk_len:]
             query_string = parser.to_sql(trial)
-            print("***trial***: ", query_string)
+            #print("***trial***: ", query_string)
             
             if validator(trial):
                 ast_list = trial
