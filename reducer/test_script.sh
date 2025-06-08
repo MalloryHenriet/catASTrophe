@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "Running test script on $TEST_CASE_LOCATION"
 
 QUERY_FILE="${TEST_CASE_LOCATION:-minimized.sql}"
 ORACLE_FILE="$(dirname "$QUERY_FILE")/oracle.txt"
@@ -17,10 +16,8 @@ if [[ "$ORACLE" =~ ^CRASH\\((.*)\\)$ ]]; then
   VERSION=${BASH_REMATCH[1]}
   /usr/bin/sqlite3-"$VERSION" < "$QUERY_FILE" > /dev/null 2>&1
   if [ $? -ne 0 ]; then
-    echo "crash still happens"
     exit 0  # crash still happens
   else
-    echo "crash disappeared"
     exit 1  # crash disappeared
   fi
 fi
@@ -30,7 +27,6 @@ if [[ "$ORACLE" == "DIFF" ]]; then
   OUTPUT1=$(/usr/bin/sqlite3-3.26.0 < "$QUERY_FILE" 2>&1)
   OUTPUT2=$(/usr/bin/sqlite3-3.39.4 < "$QUERY_FILE" 2>&1)
   [ "$OUTPUT1" != "$OUTPUT2" ] && exit 0 || exit 1
-  echo "diff"
 fi
 
 

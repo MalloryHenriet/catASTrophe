@@ -6,7 +6,6 @@ def delta_debugging(ast_list, validator):
     #valid = validator(ast_list)
     parser = SQLParser()
     
-    print("===Original===: ", parser.to_sql(ast_list))
     n = 2
     while len(ast_list) >= 1:
         chunk_len = len(ast_list) // n
@@ -32,5 +31,4 @@ def delta_debugging(ast_list, validator):
                 break
             n = min(n * 2, len(ast_list))
 
-    print("===Delta=== : ", parser.to_sql(ast_list))
     return ast_list

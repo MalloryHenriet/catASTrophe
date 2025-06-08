@@ -24,12 +24,9 @@ def reduce_query(query_path, test_script, output_path):
     # Update AST with delta debugging technique
     ast_list = delta_debugging(ast_list, validator)
 
-    # Translate the AST to SQL string
     minimized = parser.to_sql(ast_list)
 
     if minimized is None:
         return query_string
     
-    #print(f"Minimzed Query : {minimized}")
-
     return 0

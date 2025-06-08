@@ -20,7 +20,6 @@ def prepare_workspace(query_path):
 
 
 def count_tokens(sql_file_path, return_query=False):
-    print("HHHEEELLLOOOO")
 
     with open(sql_file_path, 'r') as f:
         query = f.read()
@@ -31,4 +30,3 @@ def count_tokens(sql_file_path, return_query=False):
     print("count_tokens: ", tokens)
     return (len(tokens), query) if return_query else len(tokens)
 
-   # python reducer.py --query queries-to-minimze/query2 --test test_script.sh    

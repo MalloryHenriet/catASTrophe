@@ -33,18 +33,9 @@ if __name__ == "__main__":
     end_time = time.time()
     elapsed_time = end_time - start_time
 
-    # original_tokens = count_tokens(f"{query_path}/original_test.sql")
-    # reduced_tokens = count_tokens(output_path)
 
     original_tokens, original_query = count_tokens(f"{query_path}/original_test.sql", return_query=True)
     reduced_tokens, reduced_query = count_tokens(output_path, return_query=True)
-
-    # Print full queries
-    print("\n--- Original Query ---")
-    print(original_query)
-
-    print("\n--- Reduced Query ---")
-    print(reduced_query)
 
 
     
