@@ -21,22 +21,22 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Get the query_id, copy the content of queries-to-minimze/query_id to queries/query_id
-    query_file_path = args.query
-    query_dir = os.path.dirname(query_file_path)
-    query_id = os.path.basename(query_dir)
-    prepare_workspace(query_dir)
+    query_path = args.query
+    #query_dir = os.path.dirname(query_file_path)
+    query_id = os.path.basename(query_path)
+    prepare_workspace(query_path)
 
     output_path = f"queries/{query_id}/reduced_test.sql"
 
     start_time = time.time()
-    reduce_query(query_file_path, args.test, output_path)
+    reduce_query(query_path, args.test, output_path)
     end_time = time.time()
     elapsed_time = end_time - start_time
 
     # original_tokens = count_tokens(f"{query_path}/original_test.sql")
     # reduced_tokens = count_tokens(output_path)
 
-    original_tokens, original_query = count_tokens(f"{query_dir}/original_test.sql", return_query=True)
+    original_tokens, original_query = count_tokens(f"{query_path}/original_test.sql", return_query=True)
     reduced_tokens, reduced_query = count_tokens(output_path, return_query=True)
 
     # Print full queries
