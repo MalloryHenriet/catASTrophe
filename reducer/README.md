@@ -26,6 +26,20 @@ pip install -r requirements.txt
 # User Guide
 Description of the command lines
 
+First build the docker from the Dockerfile :
+```
+docker build -t reducer.
+```
+
+Then run the docker mounting your files :
+```
+docker run -it \
+  -v "$PWD/queries-to-minimize:/reducer/queries-to-minimize" \
+  -v "$PWD/queries:/reducer/queries" \
+  -v "$PWD/test_script.sh:/reducer/test_script.sh" \
+  reducer \
+```
+
 To run the script type the following command
 ```
 ./reducer --query <query-to-minimize> --test <test-script>

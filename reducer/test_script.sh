@@ -29,5 +29,7 @@ if [[ "$ORACLE" == "DIFF" ]]; then
   [ "$OUTPUT1" != "$OUTPUT2" ] && exit 0 || exit 1
 fi
 
+
 echo "Unknown oracle: $ORACLE"
+
 exit 1
