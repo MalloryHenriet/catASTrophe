@@ -17,9 +17,13 @@ def reduce_query(query_path, test_script, output_path):
     with open(f"{query_path}/original_test.sql", "r") as original_query:
         original_sql = original_query.readlines()
 
+    meta_lines = [line for line in original_sql if line.strip().startswith(".")]
+    sql_lines = [line for line in original_sql if not line.strip().startswith(".")]
+
     # Parse the query to an token tree
     parser = SQLParser()
-    token_tree = parser.parse(original_sql)
+    token_tree = parser.parse(sql_lines)
+    
     token_tree_size = sum(len(parser.flatten_tokens(tree)) for tree in token_tree)
 
     if not token_tree:
@@ -39,7 +43,7 @@ def reduce_query(query_path, test_script, output_path):
     def validator(expr):
         full_program = required_stmts + expr
         query_string = parser.to_sql(full_program)
-        result = execute_query(query_string, test_script, output_path)
+        result = execute_query(query_string, test_script, output_path, meta_lines=meta_lines)
 
         return result == 0
     
@@ -51,7 +55,7 @@ def reduce_query(query_path, test_script, output_path):
     # Second validator function
     def full_control_validator(expr):
         query_string = parser.to_sql(expr)
-        result = execute_query(query_string, test_script, output_path)
+        result = execute_query(query_string, test_script, output_path, meta_lines=meta_lines)
 
         return result == 0
 
@@ -119,6 +123,7 @@ def reduce_query(query_path, test_script, output_path):
         return original_sql, token_tree_size, minimzed_token_size
     
     with open(output_path, "w") as out:
+        out.writelines(meta_lines)
         out.write(minimized)
     
     return minimized, token_tree_size, minimzed_token_size
