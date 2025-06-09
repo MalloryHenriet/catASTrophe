@@ -1,19 +1,24 @@
-from code.parser import SQLParser
-
 def delta_debugging(token_tree, validator):
-    parser = SQLParser()
-    
     n = 2
-    while len(token_tree) >= 1:
-        chunk_len = len(token_tree) // n
-        if chunk_len == 0:
+
+    while len(token_tree) >= 2:
+        chunk_size = len(token_tree) // n
+    
+        if chunk_size == 0:
             break
 
         some_progress = False
+        
+        chunks = []
+        # Create the chunks
+        for i in range(n):
+            start = i * chunk_size
+            end = len(token_tree) if i == n - 1 else (i + 1) * chunk_size
+            chunks.append(token_tree[start:end])
 
         for i in range(n):
             
-            trial = token_tree[:i * chunk_len] + token_tree[(i + 1) * chunk_len:]
+            trial = token_tree[:i * chunk_size] + token_tree[(i + 1) * chunk_size:]
             
             if validator(trial):
                 token_tree = trial
