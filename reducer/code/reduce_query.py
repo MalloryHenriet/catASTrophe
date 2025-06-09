@@ -1,7 +1,7 @@
 from code.parser import SQLParser
 from code.executor import execute_query
 from code.delta_debugging import delta_debugging
-from code.utils import get_used_table_column_names
+from code.utils import get_used_table_column_names, drop_shadowed_statements
 
 REQUIRED_PREFIXES = (
     "CREATE TABLE", "INSERT INTO", "CREATE INDEX", "CREATE VIEW",
@@ -70,6 +70,7 @@ def reduce_query(query_path, test_script, output_path):
         validated_required.append(stmt)
 
     final_tokens = validated_required + reduced_token_tree
+    final_tokens = drop_shadowed_statements(final_tokens, parser)
 
     minimized = parser.to_sql(final_tokens)
     minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in final_tokens)

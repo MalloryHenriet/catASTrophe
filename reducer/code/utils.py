@@ -43,3 +43,35 @@ def get_used_table_column_names(statements, parser, define_mode=False):
                 elif tok_str.isidentifier():
                     columns.add(tok_str)
     return tables, columns
+
+def extract_object_name(tokens, prefix):
+    try:
+        idx = tokens.index(prefix.split()[-1]) + 1  # "TABLE" → next token is name
+        return tokens[idx]
+    except:
+        return None
+
+def drop_shadowed_statements(statements, parser):
+    seen_defs = {}
+    to_keep = []
+
+    for stmt in reversed(statements):  # Work backwards
+        stmt_str = parser.to_sql([stmt]).strip().upper()
+        tokens = parser.flatten_tokens(stmt)
+        token_texts = [str(t).upper() for t in tokens]
+
+        # Detect statement type
+        for prefix in ["CREATE TABLE", "CREATE INDEX", "CREATE VIEW", "CREATE TRIGGER", "INSERT INTO", "SET"]:
+            if stmt_str.startswith(prefix):
+                name = extract_object_name(token_texts, prefix)
+                if name:
+                    if name in seen_defs:
+                        break
+                    else:
+                        seen_defs[name] = stmt
+                        to_keep.append(stmt)
+                        break
+        else:
+            to_keep.append(stmt)
+
+    return list(reversed(to_keep))
