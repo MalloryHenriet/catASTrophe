@@ -15,16 +15,16 @@ def must_keep(statement_str: str) -> bool:
 
 def reduce_query(query_path, test_script, output_path):
     with open(f"{query_path}/original_test.sql", "r") as original_query:
-        query_string = original_query.readlines()
+        original_sql = original_query.readlines()
 
-    # Parse the query to an AST
+    # Parse the query to an token tree
     parser = SQLParser()
-    token_tree = parser.parse(query_string)
+    token_tree = parser.parse(original_sql)
     token_tree_size = sum(len(parser.flatten_tokens(tree)) for tree in token_tree)
 
     if not token_tree:
         print("No valid statement to reduce")
-        return query_string
+        return original_sql
     
     required_stmts = []
     reducible_stmts = []
@@ -116,7 +116,7 @@ def reduce_query(query_path, test_script, output_path):
     minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in final_tokens)
 
     if minimized is None:
-        return query_string, token_tree_size, minimzed_token_size
+        return original_sql, token_tree_size, minimzed_token_size
     
     with open(output_path, "w") as out:
         out.write(minimized)
