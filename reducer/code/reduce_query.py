@@ -1,6 +1,7 @@
 from code.parser import SQLParser
 from code.executor import execute_query
 from code.delta_debugging import delta_debugging
+from code.simplifier import simplifier
 from code.utils import get_used_table_column_names, drop_shadowed_statements
 
 REQUIRED_PREFIXES = (
@@ -122,6 +123,8 @@ def reduce_query(query_path, test_script, output_path):
     final_tokens = drop_shadowed_statements(final_tokens, parser)
     if not full_control_validator(final_tokens):
         raise RuntimeError("Bug lost after shadowed definition cleanup")
+    
+    #simplified = simplifier(final_tokens, validator)
 
     minimized = parser.to_sql(final_tokens)
     minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in final_tokens)
