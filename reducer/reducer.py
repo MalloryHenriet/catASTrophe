@@ -6,7 +6,6 @@ import os
 from code.reduce_query import reduce_query
 from code.utils import prepare_workspace
 import time
-from code.utils import count_tokens
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Reduce bug-triggering SQL queries")
