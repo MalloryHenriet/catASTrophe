@@ -1,10 +1,16 @@
 from code.parser import SQLParser
 from code.executor import execute_query
 from code.delta_debugging import delta_debugging
+from code.utils import get_used_table_column_names
+
+REQUIRED_PREFIXES = (
+    "CREATE TABLE", "INSERT INTO", "CREATE INDEX", "CREATE VIEW",
+    "CREATE TRIGGER", "SET ", "PRAGMA", "ANALYZE", "VACUUM", "CREATE TEMP"
+)
 
 def must_keep(statement_str: str) -> bool:
     upper = statement_str.upper().strip()
-    return upper.startswith("CREATE TABLE") or upper.startswith("INSERT INTO")
+    return any(upper.startswith(prefix) for prefix in REQUIRED_PREFIXES)
 
 def reduce_query(query_path, test_script, output_path):
     with open(f"{query_path}/original_test.sql", "r") as original_query:
@@ -41,8 +47,32 @@ def reduce_query(query_path, test_script, output_path):
     # Update AST with delta debugging technique
     reduced_token_tree = delta_debugging(reducible_stmts, validator)
 
-    minimized = parser.to_sql(required_stmts + reduced_token_tree)
-    minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in required_stmts + reduced_token_tree)
+    # Hunt required_stmts that are useless
+    # ----
+    # First, the statements that are not referenced later
+    used_tables, used_columns = get_used_table_column_names(reduced_token_tree, parser)
+
+    semantically_used = []
+    for stmt in required_stmts:
+        stmt_tokens = parser.flatten_tokens(stmt)
+        token_texts = {str(tok).lower() for tok in stmt_tokens}
+
+        if any(name in token_texts for name in used_tables.union(used_columns)):
+            semantically_used.append(stmt)
+    
+    # ----
+    # Second, the statements that are verified to be useless
+    validated_required = []
+    for stmt in semantically_used:
+        candidate_required = [s for s in required_stmts if s != stmt]
+        if validator(reduced_token_tree + candidate_required):
+            continue
+        validated_required.append(stmt)
+
+    final_tokens = validated_required + reduced_token_tree
+
+    minimized = parser.to_sql(final_tokens)
+    minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in final_tokens)
 
     if minimized is None:
         return query_string, token_tree_size, minimzed_token_size
