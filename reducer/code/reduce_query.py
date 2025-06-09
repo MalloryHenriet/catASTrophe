@@ -17,17 +17,16 @@ def reduce_query(query_path, test_script, output_path):
     
     # Validator function
     def validator(expr):
-        parser = SQLParser()
         query_string = parser.to_sql(expr)
         result = execute_query(query_string, test_script, output_path)
 
         return result == 0
 
     # Update AST with delta debugging technique
-    token_tree = delta_debugging(token_tree, validator)
+    reduced_token_tree = delta_debugging(token_tree, validator)
 
-    minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in token_tree)
-    minimized = parser.to_sql(token_tree)
+    minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in reduced_token_tree)
+    minimized = parser.to_sql(reduced_token_tree)
 
     if minimized is None:
         return query_string, token_tree_size, minimzed_token_size

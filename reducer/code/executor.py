@@ -13,7 +13,7 @@ def execute_query(sql_query, test_script, query_path="query.sql"):
     env["TEST_CASE_LOCATION"] = os.path.abspath(query_path)
 
     try:
-        result = subprocess.run(f"./{test_script}", env=env, capture_output=True)
+        result = subprocess.run(f"./{test_script}", env=env, capture_output=True, text=True)
 
         # print("STDOUT:", result.stdout.decode())
         # print("STDERR:", result.stderr.decode())
