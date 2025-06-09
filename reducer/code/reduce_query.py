@@ -19,7 +19,6 @@ def reduce_query(query_path, test_script, output_path):
     def validator(expr):
         parser = SQLParser()
         query_string = parser.to_sql(expr)
-
         result = execute_query(query_string, test_script, output_path)
 
         return result == 0

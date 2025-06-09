@@ -13,19 +13,12 @@ def execute_query(sql_query, test_script, query_path="query.sql"):
     env["TEST_CASE_LOCATION"] = os.path.abspath(query_path)
 
     try:
-        result = subprocess.run(f"./{test_script}", env=env, capture_output=True, text=True)
+        result = subprocess.run(f"./{test_script}", env=env, capture_output=True)
 
-        stderr = result.stderr.lower()
         # print("STDOUT:", result.stdout.decode())
         # print("STDERR:", result.stderr.decode())
         # print("Return code:", result.returncode)
-
-        if "segmentation fault" in stderr or "database disk image is malformed" in stderr:
-            return 0  # Bug triggered
-        elif "no such table" in stderr:
-            return 1  # Invalid query, not a bug
-        else:
-            return result.returncode
+        return result.returncode
         
     except Exception as e:
         print(f"Execution error : {e}")

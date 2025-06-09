@@ -1,7 +1,10 @@
 def delta_debugging(token_tree, validator):
+    if not validator(token_tree):
+        print("[Error] Initial input does not trigger bug. Abort.")
+        return token_tree
+    
     n = 2
-
-    while len(token_tree) >= 2:
+    while len(token_tree) >= 1:
         chunk_size = len(token_tree) // n
     
         if chunk_size == 0:
@@ -9,19 +12,12 @@ def delta_debugging(token_tree, validator):
 
         some_progress = False
         
-        chunks = []
-        # Create the chunks
-        for i in range(n):
-            start = i * chunk_size
-            end = len(token_tree) if i == n - 1 else (i + 1) * chunk_size
-            chunks.append(token_tree[start:end])
-
         # Remove chunk after chunk
         for i in range(n):
-            complement = [token for j, chunk in enumerate(chunks) if j != i for token in chunk]
+            trial = token_tree[:i * chunk_size] + token_tree[(i + 1) * chunk_size:]
             
-            if validator(complement):
-                token_tree = complement
+            if validator(trial):
+                token_tree = trial
                 n = max(n - 1, 2)
                 some_progress = True
                 break
