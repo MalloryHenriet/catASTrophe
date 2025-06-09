@@ -20,12 +20,32 @@ ORACLE=$(head -n 1 "$ORACLE_FILE")
 # Handle CRASH(version)
 if [[ "$ORACLE" =~ ^CRASH\((.*)\)$ ]]; then
   VERSION="${BASH_REMATCH[1]}"
-  /usr/bin/sqlite3-"$VERSION" < "$QUERY_FILE" > /dev/null 2>&1
-  if [ $? -ne 0 ]; then
-    exit 0  # crash still happens
-  else
-    exit 1  # crash disappeared
+  SQLITE_BIN="/usr/bin/sqlite3-$VERSION"
+
+  if [ ! -x "$SQLITE_BIN" ]; then
+    echo "SQLite version $VERSION not found at $SQLITE_BIN"
+    exit 1
   fi
+
+  # Run SQLite under timeout and capture signal-based failures
+  timeout 3s "$SQLITE_BIN" < "$QUERY_FILE" > /dev/null 2>sqlite_error.log
+  EXIT_CODE=$?
+
+  # If killed by signal (128 + N), it's a crash
+  if [ $EXIT_CODE -ge 128 ]; then
+    rm -f sqlite_error.log
+    exit 0  # valid crash
+  fi
+
+  # Filter typical SQL errors
+  if grep -qi "error:" sqlite_error.log; then
+    rm -f sqlite_error.log
+    exit 1  # not a crash
+  fi
+
+  # Not a crash
+  rm -f sqlite_error.log
+  exit 1
 fi
 
 # Handle DIFF

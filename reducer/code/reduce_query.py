@@ -1,10 +1,16 @@
 from code.parser import SQLParser
 from code.executor import execute_query
 from code.delta_debugging import delta_debugging
+from code.utils import get_used_table_column_names, drop_shadowed_statements
+
+REQUIRED_PREFIXES = (
+    "CREATE TABLE", "INSERT INTO", "CREATE INDEX", "CREATE VIEW",
+    "CREATE TRIGGER", "SET ", "PRAGMA", "ANALYZE", "VACUUM", "CREATE TEMP"
+)
 
 def must_keep(statement_str: str) -> bool:
     upper = statement_str.upper().strip()
-    return upper.startswith("CREATE TABLE") or upper.startswith("INSERT INTO")
+    return any(upper.startswith(prefix) for prefix in REQUIRED_PREFIXES)
 
 def reduce_query(query_path, test_script, output_path):
     with open(f"{query_path}/original_test.sql", "r") as original_query:
@@ -38,11 +44,87 @@ def reduce_query(query_path, test_script, output_path):
     
     assert validator(reducible_stmts), "Original reducible portion does not trigger the bug."
 
-    # Update AST with delta debugging technique
+    # Update Token tree with delta debugging technique
     reduced_token_tree = delta_debugging(reducible_stmts, validator)
 
-    minimized = parser.to_sql(required_stmts + reduced_token_tree)
-    minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in required_stmts + reduced_token_tree)
+    # Second validator function
+    def full_control_validator(expr):
+        query_string = parser.to_sql(expr)
+        result = execute_query(query_string, test_script, output_path)
+
+        return result == 0
+
+    # Hunt required_stmts that are useless
+    # ----
+    # First, the statements that are not referenced later
+    used_tables, used_columns = get_used_table_column_names(reduced_token_tree, parser)
+
+    semantically_used = []
+    for stmt in required_stmts:
+        stmt_tokens = parser.flatten_tokens(stmt)
+        token_texts = {str(tok).lower() for tok in stmt_tokens}
+
+        # Check semantic hints
+        likely_unused = not any(
+            name in token_texts for name in used_tables.union(used_columns)
+        )
+
+        # Validate before dropping
+        test_program = semantically_used + reduced_token_tree
+        if likely_unused and full_control_validator(test_program):
+            continue
+        elif not full_control_validator(test_program):
+            semantically_used.append(stmt)
+        else:
+            semantically_used.append(stmt)
+    
+    if not full_control_validator(semantically_used + reduced_token_tree):
+        raise RuntimeError("Bug lost after semantic filtering")
+    
+    # ----
+    # Second, the statements that are verified to be useless
+    validated_required = []
+    for stmt in semantically_used:
+        candidate_required = [s for s in required_stmts if s != stmt]
+        if full_control_validator(reduced_token_tree + candidate_required):
+            continue
+        validated_required.append(stmt)
+
+    if not full_control_validator(validated_required + reduced_token_tree):
+        raise RuntimeError("Bug lost after validator-based filtering")
+    
+    # ----
+    # Third, the INSERT that are useless
+    final_required = []
+    used_tables, used_columns = get_used_table_column_names(reduced_token_tree, parser)
+
+    for stmt in validated_required:
+        sql = parser.to_sql([stmt]).strip().upper()
+        if sql.startswith("INSERT INTO"):
+            stmt_tokens = parser.flatten_tokens(stmt)
+            token_texts = {str(tok).lower() for tok in stmt_tokens}
+
+            # Check if table is used
+            table_candidates = [tok for tok in stmt_tokens if str(tok).upper() == "INTO"]
+            if table_candidates:
+                idx = stmt_tokens.index(table_candidates[0])
+                if idx + 1 < len(stmt_tokens):
+                    target_table = str(stmt_tokens[idx + 1]).lower()
+
+                    if target_table not in used_tables:
+                        # Try removing and see if bug remains
+                        candidate_stmts = [s for s in validated_required if s != stmt]
+                        if full_control_validator(candidate_stmts + reduced_token_tree):
+                            continue  # safely removed
+        final_required.append(stmt)
+
+    final_tokens = final_required + reduced_token_tree
+    final_tokens = drop_shadowed_statements(final_tokens, parser)
+    if not full_control_validator(final_tokens):
+        raise RuntimeError("Bug lost after shadowed definition cleanup")
+
+    minimized = parser.to_sql(final_tokens)
+    minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in final_tokens)
 
     if minimized is None:
         return query_string, token_tree_size, minimzed_token_size
