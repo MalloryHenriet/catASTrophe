@@ -8,7 +8,13 @@ class SQLParser:
     def parse(self, sql_lines):
         sql_string = "".join(sql_lines)
         statements = [stmt.strip() for stmt in sqlparse.split(sql_string) if stmt.strip()]
-        tokenized_statements = [sqlparse.parse(stmt)[0] for stmt in statements]
+        
+        tokenized_statements = []
+        for stmt in statements:
+            parsed = sqlparse.parse(stmt)
+            if parsed:  # Avoid IndexError
+                tokenized_statements.append(parsed[0])
+        
         return tokenized_statements
     
     # Take the syntax tree back to SQL string

@@ -45,6 +45,11 @@ To run the script type the following command
 ./reducer --query <query-to-minimize> --test <test-script>
 ```
 
+e.g.
+```
+./reducer --query queries-to-minimize/query6 --test test_script.sh
+```
+
 ### Arguments
 * ``--query`` is the SQL query to reduce
 * ``--test`` is an arbitrary shell script that checks whether the minimzed query still triggers the bug or not

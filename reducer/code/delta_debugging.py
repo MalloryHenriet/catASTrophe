@@ -1,34 +1,23 @@
-#runs delta debugging strategy on the given query and returns the reduced list if valid
+def delta_debugging(tokens, validator):
+    if not validator(tokens):
+        print("[Error] Initial input does not trigger bug. Abort.")
+        return tokens
 
-from code.parser import SQLParser
-
-def delta_debugging(ast_list, validator):
-    #valid = validator(ast_list)
-    parser = SQLParser()
-    
     n = 2
-    while len(ast_list) >= 1:
-        chunk_len = len(ast_list) // n
-        if chunk_len == 0:
-            break
-
-        some_progress = False
-
+    while len(tokens) >= 2:
+        chunk_size = len(tokens) // n
+        subsets = [tokens[i * chunk_size : (i + 1) * chunk_size] for i in range(n)]
+        
+        # Try removing each subset
         for i in range(n):
-            
-            trial = ast_list[:i * chunk_len] + ast_list[(i + 1) * chunk_len:]
-            query_string = parser.to_sql(trial)
-            #print("***trial***: ", query_string)
-            
-            if validator(trial):
-                ast_list = trial
+            complement = [t for j, s in enumerate(subsets) if j != i for t in s]
+            if validator(complement):
+                tokens = complement
                 n = max(n - 1, 2)
-                some_progress = True
                 break
-
-        if not some_progress:
-            if n >= len(ast_list):
+        else:
+            if n >= len(tokens):
                 break
-            n = min(n * 2, len(ast_list))
+            n = min(n * 2, len(tokens))
 
-    return ast_list
+    return tokens
