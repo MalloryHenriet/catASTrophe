@@ -1,14 +1,11 @@
-#runs delta debugging strategy on the given query and returns the reduced list if valid
-
 from code.parser import SQLParser
 
-def delta_debugging(ast_list, validator):
-    #valid = validator(ast_list)
+def delta_debugging(token_tree, validator):
     parser = SQLParser()
     
     n = 2
-    while len(ast_list) >= 1:
-        chunk_len = len(ast_list) // n
+    while len(token_tree) >= 1:
+        chunk_len = len(token_tree) // n
         if chunk_len == 0:
             break
 
@@ -16,19 +13,17 @@ def delta_debugging(ast_list, validator):
 
         for i in range(n):
             
-            trial = ast_list[:i * chunk_len] + ast_list[(i + 1) * chunk_len:]
-            query_string = parser.to_sql(trial)
-            #print("***trial***: ", query_string)
+            trial = token_tree[:i * chunk_len] + token_tree[(i + 1) * chunk_len:]
             
             if validator(trial):
-                ast_list = trial
+                token_tree = trial
                 n = max(n - 1, 2)
                 some_progress = True
                 break
 
         if not some_progress:
-            if n >= len(ast_list):
+            if n >= len(token_tree):
                 break
-            n = min(n * 2, len(ast_list))
+            n = min(n * 2, len(token_tree))
 
-    return ast_list
+    return token_tree
