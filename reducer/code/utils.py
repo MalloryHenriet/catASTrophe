@@ -18,31 +18,27 @@ def prepare_workspace(query_path):
 
     shutil.copytree(src, dst)
 
-def get_used_table_column_names(statements, parser, define_mode=False):
-    """
-    Returns (tables, columns) used or defined in the given statements.
-    If define_mode is True, returns what is defined (e.g., CREATE TABLE).
-    Otherwise, returns what is referenced (e.g., SELECT ... FROM ...).
-    """
-    tables = set()
-    columns = set()
-    for stmt in statements:
+def get_used_table_column_names(stmts, parser):
+    used_tables = set()
+    used_columns = set()
+    for stmt in stmts:
         tokens = parser.flatten_tokens(stmt)
-        for tok in tokens:
-            tok_str = str(tok).lower()
-            if define_mode:
-                if "create table" in tok_str or "create view" in tok_str or "create index" in tok_str:
-                    tables.add(tok_str)
-                if "(" in tok_str and ")" in tok_str:
-                    columns.update(tok_str.replace("(", "").replace(")", "").split(","))
+        for i, tok in enumerate(tokens):
+            t = str(tok).lower().strip('"`[]')
+
+            if not t.isidentifier():
+                continue
+
+            # Simple heuristic: name after FROM or JOIN = table
+            if i > 0 and str(tokens[i-1]).upper() in {"FROM", "JOIN"}:
+                used_tables.add(t)
+            elif "." in t:
+                tbl, col = t.split(".", 1)
+                used_tables.add(tbl)
+                used_columns.add(col)
             else:
-                if "." in tok_str:
-                    t, c = tok_str.split(".", 1)
-                    tables.add(t)
-                    columns.add(c)
-                elif tok_str.isidentifier():
-                    columns.add(tok_str)
-    return tables, columns
+                used_columns.add(t)
+    return used_tables, used_columns
 
 def extract_object_name(tokens, prefix):
     try:
@@ -52,26 +48,29 @@ def extract_object_name(tokens, prefix):
         return None
 
 def drop_shadowed_statements(statements, parser):
-    seen_defs = {}
-    to_keep = []
+    object_defs = {}
+    to_remove = set()
 
-    for stmt in reversed(statements):  # Work backwards
+    for i, stmt in enumerate(statements):
         stmt_str = parser.to_sql([stmt]).strip().upper()
         tokens = parser.flatten_tokens(stmt)
-        token_texts = [str(t).upper() for t in tokens]
+        token_texts = [str(tok).lower() for tok in tokens]
 
-        # Detect statement type
-        for prefix in ["CREATE TABLE", "CREATE INDEX", "CREATE VIEW", "CREATE TRIGGER", "INSERT INTO", "SET"]:
+        for prefix in ["CREATE TABLE", "CREATE VIEW", "CREATE INDEX"]:
             if stmt_str.startswith(prefix):
                 name = extract_object_name(token_texts, prefix)
-                if name:
-                    if name in seen_defs:
-                        break
-                    else:
-                        seen_defs[name] = stmt
-                        to_keep.append(stmt)
-                        break
-        else:
-            to_keep.append(stmt)
+                if name is None:
+                    continue
 
-    return list(reversed(to_keep))
+                if name in object_defs:
+                    last_idx = object_defs[name]
+                    in_between = statements[last_idx + 1:i]
+
+                    # If object not used between last and current redefinition, drop it
+                    used_tables, _ = get_used_table_column_names(in_between, parser)
+                    if name not in used_tables:
+                        to_remove.add(last_idx)
+
+                object_defs[name] = i
+
+    return [stmt for i, stmt in enumerate(statements) if i not in to_remove]

@@ -44,8 +44,15 @@ def reduce_query(query_path, test_script, output_path):
     
     assert validator(reducible_stmts), "Original reducible portion does not trigger the bug."
 
-    # Update AST with delta debugging technique
+    # Update Token tree with delta debugging technique
     reduced_token_tree = delta_debugging(reducible_stmts, validator)
+
+    # Second validator function
+    def full_control_validator(expr):
+        query_string = parser.to_sql(expr)
+        result = execute_query(query_string, test_script, output_path)
+
+        return result == 0
 
     # Hunt required_stmts that are useless
     # ----
@@ -57,20 +64,39 @@ def reduce_query(query_path, test_script, output_path):
         stmt_tokens = parser.flatten_tokens(stmt)
         token_texts = {str(tok).lower() for tok in stmt_tokens}
 
-        if any(name in token_texts for name in used_tables.union(used_columns)):
+        # Check semantic hints
+        likely_unused = not any(
+            name in token_texts for name in used_tables.union(used_columns)
+        )
+
+        # Validate before dropping
+        test_program = semantically_used + reduced_token_tree
+        if likely_unused and full_control_validator(test_program):
+            continue
+        elif not full_control_validator(test_program):
             semantically_used.append(stmt)
+        else:
+            semantically_used.append(stmt)
+    
+    if not full_control_validator(semantically_used + reduced_token_tree):
+        raise RuntimeError("Bug lost after semantic filtering")
     
     # ----
     # Second, the statements that are verified to be useless
     validated_required = []
     for stmt in semantically_used:
         candidate_required = [s for s in required_stmts if s != stmt]
-        if validator(reduced_token_tree + candidate_required):
+        if full_control_validator(reduced_token_tree + candidate_required):
             continue
         validated_required.append(stmt)
 
+    if not full_control_validator(validated_required + reduced_token_tree):
+        raise RuntimeError("Bug lost after validator-based filtering")
+
     final_tokens = validated_required + reduced_token_tree
     final_tokens = drop_shadowed_statements(final_tokens, parser)
+    if not full_control_validator(final_tokens):
+        raise RuntimeError("Bug lost after shadowed definition cleanup")
 
     minimized = parser.to_sql(final_tokens)
     minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in final_tokens)
