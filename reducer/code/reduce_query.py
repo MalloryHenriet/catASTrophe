@@ -20,7 +20,9 @@ def reduce_query(query_path, test_script, output_path):
         parser = SQLParser()
         query_string = parser.to_sql(expr)
 
-        return execute_query(query_string, test_script, output_path)
+        result = execute_query(query_string, test_script, output_path)
+
+        return result == 0
 
     # Update AST with delta debugging technique
     token_tree = delta_debugging(token_tree, validator)
