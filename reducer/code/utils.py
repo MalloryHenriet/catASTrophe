@@ -1,6 +1,5 @@
 import shutil
 import os
-import sqlparse
 
 def prepare_workspace(query_path):
     src = os.path.abspath(query_path)

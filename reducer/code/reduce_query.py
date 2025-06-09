@@ -28,7 +28,7 @@ def reduce_query(query_path, test_script, output_path):
         return execute_query(query_string, test_script, output_path)
 
     # Update AST with delta debugging technique
-    # token_tree = delta_debugging(token_tree, validator)
+    token_tree = delta_debugging(token_tree, validator)
 
     minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in token_tree)
     minimized = parser.to_sql(token_tree)
