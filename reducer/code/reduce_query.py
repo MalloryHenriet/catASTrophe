@@ -1,7 +1,7 @@
 from code.parser import SQLParser
 from code.executor import execute_query
 from code.delta_debugging import delta_debugging
-from code.utils import get_used_table_column_names, drop_shadowed_statements
+from code.utils import get_used_table_column_names, drop_shadowed_statements, drop_unused_insert_statements
 
 REQUIRED_PREFIXES = (
     "CREATE TABLE", "INSERT INTO", "CREATE INDEX", "CREATE VIEW",
@@ -95,28 +95,8 @@ def reduce_query(query_path, test_script, output_path):
     
     # ----
     # Third, the INSERT that are useless
-    final_required = []
     used_tables, used_columns = get_used_table_column_names(reduced_token_tree, parser)
-
-    for stmt in validated_required:
-        sql = parser.to_sql([stmt]).strip().upper()
-        if sql.startswith("INSERT INTO"):
-            stmt_tokens = parser.flatten_tokens(stmt)
-            token_texts = {str(tok).lower() for tok in stmt_tokens}
-
-            # Check if table is used
-            table_candidates = [tok for tok in stmt_tokens if str(tok).upper() == "INTO"]
-            if table_candidates:
-                idx = stmt_tokens.index(table_candidates[0])
-                if idx + 1 < len(stmt_tokens):
-                    target_table = str(stmt_tokens[idx + 1]).lower()
-
-                    if target_table not in used_tables:
-                        # Try removing and see if bug remains
-                        candidate_stmts = [s for s in validated_required if s != stmt]
-                        if full_control_validator(candidate_stmts + reduced_token_tree):
-                            continue  # safely removed
-        final_required.append(stmt)
+    final_required = drop_unused_insert_statements(validated_required, reduced_token_tree, parser, full_control_validator)
 
     final_tokens = final_required + reduced_token_tree
     final_tokens = drop_shadowed_statements(final_tokens, parser)
