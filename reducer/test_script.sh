@@ -37,13 +37,14 @@ if [[ "$ORACLE" =~ ^CRASH\((.*)\)$ ]]; then
     exit 0  # valid crash
   fi
 
-  # Filter typical SQL errors
-  if grep -qi "error:" sqlite_error.log; then
+  # If stderr contains signs of internal DB corruption, treat as crash
+  if grep -qiE 'database (disk image|schema) is malformed|corruption|not a database' sqlite_error.log; then
+    echo "Detected internal corruption error, treating as crash"
     rm -f sqlite_error.log
-    exit 1  # not a crash
+    exit 0
   fi
 
-  # Not a crash
+  # Else: likely just a syntax/runtime SQL error
   rm -f sqlite_error.log
   exit 1
 fi

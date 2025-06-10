@@ -2,7 +2,7 @@ from code.parser import SQLParser
 from code.simplifier import SQLSimplifier
 from code.executor import execute_query
 from code.delta_debugging import delta_debugging
-from code.utils import get_used_table_column_names, drop_shadowed_statements
+from code.utils import get_used_table_column_names, drop_shadowed_statements, drop_unused_insert_statements
 
 REQUIRED_PREFIXES = (
     "CREATE TABLE", "INSERT INTO", "CREATE INDEX", "CREATE VIEW",
@@ -15,16 +15,20 @@ def must_keep(statement_str: str) -> bool:
 
 def reduce_query(query_path, test_script, output_path):
     with open(f"{query_path}/original_test.sql", "r") as original_query:
-        query_string = original_query.readlines()
+        original_sql = original_query.readlines()
 
-    # Parse the query to an AST
+    meta_lines = [line for line in original_sql if line.strip().startswith(".")]
+    sql_lines = [line for line in original_sql if not line.strip().startswith(".")]
+
+    # Parse the query to an token tree
     parser = SQLParser()
-    token_tree = parser.parse(query_string)
+    token_tree = parser.parse(sql_lines)
+    
     token_tree_size = sum(len(parser.flatten_tokens(tree)) for tree in token_tree)
 
     if not token_tree:
         print("No valid statement to reduce")
-        return query_string
+        return original_sql
     
     required_stmts = []
     reducible_stmts = []
@@ -39,7 +43,7 @@ def reduce_query(query_path, test_script, output_path):
     def validator(expr):
         full_program = required_stmts + expr
         query_string = parser.to_sql(full_program)
-        result = execute_query(query_string, test_script, output_path)
+        result = execute_query(query_string, test_script, output_path, meta_lines=meta_lines)
 
         return result == 0
     
@@ -51,7 +55,7 @@ def reduce_query(query_path, test_script, output_path):
     # Second validator function
     def full_control_validator(expr):
         query_string = parser.to_sql(expr)
-        result = execute_query(query_string, test_script, output_path)
+        result = execute_query(query_string, test_script, output_path, meta_lines=meta_lines)
 
         return result == 0
 
@@ -96,28 +100,8 @@ def reduce_query(query_path, test_script, output_path):
     
     # ----
     # Third, the INSERT that are useless
-    final_required = []
     used_tables, used_columns = get_used_table_column_names(reduced_token_tree, parser)
-
-    for stmt in validated_required:
-        sql = parser.to_sql([stmt]).strip().upper()
-        if sql.startswith("INSERT INTO"):
-            stmt_tokens = parser.flatten_tokens(stmt)
-            token_texts = {str(tok).lower() for tok in stmt_tokens}
-
-            # Check if table is used
-            table_candidates = [tok for tok in stmt_tokens if str(tok).upper() == "INTO"]
-            if table_candidates:
-                idx = stmt_tokens.index(table_candidates[0])
-                if idx + 1 < len(stmt_tokens):
-                    target_table = str(stmt_tokens[idx + 1]).lower()
-
-                    if target_table not in used_tables:
-                        # Try removing and see if bug remains
-                        candidate_stmts = [s for s in validated_required if s != stmt]
-                        if full_control_validator(candidate_stmts + reduced_token_tree):
-                            continue  # safely removed
-        final_required.append(stmt)
+    final_required = drop_unused_insert_statements(validated_required, reduced_token_tree, parser, full_control_validator)
 
     final_tokens = final_required + reduced_token_tree
     final_tokens = drop_shadowed_statements(final_tokens, parser)
@@ -136,9 +120,10 @@ def reduce_query(query_path, test_script, output_path):
     minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in final_tokens)
 
     if minimized is None:
-        return query_string, token_tree_size, minimzed_token_size
+        return original_sql, token_tree_size, minimzed_token_size
     
     with open(output_path, "w") as out:
+        out.writelines(meta_lines)
         out.write(minimized)
     
     return minimized, token_tree_size, minimzed_token_size

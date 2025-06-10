@@ -75,24 +75,44 @@ class SQLSimplifier:
         return sql
 
     def _remove_where_conditions(self, sql, stmts, i):
-        match = re.search(r'WHERE\s+(.*?)(GROUP\s+BY|ORDER\s+BY|LIMIT|$)', sql, flags=re.IGNORECASE | re.DOTALL)
+        pattern = r'WHERE\s+(.*?)(\s+GROUP\s+BY|\s+ORDER\s+BY|\s+LIMIT|$)'
+        match = re.search(pattern, sql, flags=re.IGNORECASE | re.DOTALL)
         if not match:
             return sql
 
-        conds, suffix = match.groups()
+        conds, _ = match.groups()
         conditions = [c.strip(' ()') for c in re.split(r'\s+AND\s+', conds, flags=re.IGNORECASE)]
         remaining = conditions[:]
 
         for cond in conditions:
             temp = ' AND '.join([c for c in remaining if c != cond])
-            new_sql = (
-                re.sub(r'WHERE\s+.*?(GROUP\s+BY|ORDER\s+BY|LIMIT|$)',
-                       f'WHERE {temp} {suffix}' if temp else '',
-                       sql, flags=re.IGNORECASE | re.DOTALL)
-            )
+
+            try:
+                if temp:
+                    new_sql = re.sub(
+                        pattern,
+                        lambda m: f'WHERE {temp}{m.group(2)}',
+                        sql,
+                        flags=re.IGNORECASE | re.DOTALL
+                    )
+                else:
+                    new_sql = re.sub(
+                        pattern,
+                        lambda m: m.group(2),
+                        sql,
+                        flags=re.IGNORECASE | re.DOTALL
+                    )
+            except re.error as e:
+                print("🔥 REGEX ERROR 🔥")
+                print("Pattern :", pattern)
+                print("Repl    :", temp)
+                print("Error   :", str(e))
+                raise
+
             new_sql_list = [self.parser.to_sql([stmt]) if idx != i else new_sql for idx, stmt in enumerate(stmts)]
             parsed_new_stmts = [self.parser.parse(sql)[0] for sql in new_sql_list]
             if self._validate(parsed_new_stmts):
                 sql = new_sql
                 remaining.remove(cond)
+
         return sql
