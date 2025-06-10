@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
 import argparse
-import os
 
 from code.reduce_query import reduce_query
-from code.utils import prepare_workspace
 import time
 
 if __name__ == "__main__":
@@ -19,13 +17,8 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    # Get the query_id, copy the content of queries-to-minimze/query_id to queries/query_id
     query_path = args.query
-    #query_dir = os.path.dirname(query_file_path)
-    query_id = os.path.basename(query_path)
-    prepare_workspace(query_path)
-
-    output_path = f"queries/{query_id}/reduced_test.sql"
+    output_path = f"{query_path}/reduced_query.sql"
 
     start_time = time.time()
     minimzed_query, original_token_number, reduced_token_number = reduce_query(query_path, args.test, output_path)
