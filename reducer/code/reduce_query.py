@@ -108,14 +108,13 @@ def reduce_query(query_path, test_script, output_path):
     if not full_control_validator(final_tokens):
         raise RuntimeError("Bug lost after shadowed definition cleanup")
     
-    # Step: Simplify final token tree
+    # Simplify final token tree
     simplifier = SQLSimplifier(parser, full_control_validator)
     final_tokens = simplifier.simplify(final_tokens)
-
-    # Final validation
     if not full_control_validator(final_tokens):
         raise RuntimeError("Bug lost after simplification pass")
 
+    # Minimized Query
     minimized = parser.to_sql(final_tokens)
     minimzed_token_size = sum(len(parser.flatten_tokens(tree)) for tree in final_tokens)
 
