@@ -5,8 +5,10 @@ import subprocess
 
 # returns 0 when bug still happens (valid reduction)
 # returns 1 when the bug is gone (wrong reduction)
-def execute_query(sql_query, test_script, query_path="query.sql"):
+def execute_query(sql_query, test_script, query_path="query.sql", meta_lines=None):
     with open(query_path, "w") as sql_file:
+        if meta_lines:
+            sql_file.writelines(meta_lines)
         sql_file.write(sql_query)
 
     env = os.environ.copy()
