@@ -103,11 +103,7 @@ class SQLSimplifier:
                         flags=re.IGNORECASE | re.DOTALL
                     )
             except re.error as e:
-                print("🔥 REGEX ERROR 🔥")
-                print("Pattern :", pattern)
-                print("Repl    :", temp)
-                print("Error   :", str(e))
-                raise
+                raise Exception(e)
 
             new_sql_list = [self.parser.to_sql([stmt]) if idx != i else new_sql for idx, stmt in enumerate(stmts)]
             parsed_new_stmts = [self.parser.parse(sql)[0] for sql in new_sql_list]
