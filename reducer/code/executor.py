@@ -16,10 +16,6 @@ def execute_query(sql_query, test_script, query_path="query.sql", meta_lines=Non
 
     try:
         result = subprocess.run(f"./{test_script}", env=env, capture_output=True, text=True)
-
-        # print("STDOUT:", result.stdout.decode())
-        # print("STDERR:", result.stderr.decode())
-        # print("Return code:", result.returncode)
         return result.returncode
         
     except Exception as e:

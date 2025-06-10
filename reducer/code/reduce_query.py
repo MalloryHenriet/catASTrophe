@@ -14,7 +14,7 @@ def must_keep(statement_str: str) -> bool:
     return any(upper.startswith(prefix) for prefix in REQUIRED_PREFIXES)
 
 def reduce_query(query_path, test_script, output_path):
-    with open(f"{query_path}/original_test.sql", "r") as original_query:
+    with open(query_path, "r") as original_query:
         original_sql = original_query.readlines()
 
     meta_lines = [line for line in original_sql if line.strip().startswith(".")]

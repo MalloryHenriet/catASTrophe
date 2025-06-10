@@ -46,7 +46,7 @@ To run the script type the following command
 
 e.g.
 ```
-./reducer --query queries-to-minimize/query6 --test test_script.sh
+./reducer --query queries-to-minimize/query6/original_test.sql --test test_script.sh
 ```
 
 ### Arguments

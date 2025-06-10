@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import os
 
 from code.reduce_query import reduce_query
 import time
@@ -18,7 +19,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     query_path = args.query
-    output_path = f"{query_path}/reduced_query.sql"
+    query_dir = os.path.dirname(query_path)
+    output_path = os.path.join(query_dir, "reduced_query.sql")
 
     start_time = time.time()
     minimzed_query, original_token_number, reduced_token_number = reduce_query(query_path, args.test, output_path)
